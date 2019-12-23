@@ -1,0 +1,57 @@
+\subsection{The Ellipsoid Method and A Separation Oracle for Multicut}
+
+Our LP rounding algorithm will first solve the linear program relaxation for a optimal continuous solution $x$. However, one look at relaxation~\ref{eq:primal-lp} raises an immediate issue. How can we efficiently solve the LP when there may be exponentially many paths between $s_i$ and $t_i$ in the given graph. There does exist a polynomial sized (with respect to the number of vertices and edges in the graph) LP relaxation for multicut. However, these notes will approach this problem using the \emph{Ellipsoid Method}.
+
+The Ellipsoid Method is an optimization method that solves a linear program provided one can construct a polynomial-time \emph{separation oracle}. A separation oracle is a \emph{problem-specific} algorithm that operates as follows. Given a potential solution to the LP $x$, it returns \textsc{yes} if $x$ is feasible. If $x$ is not feasible, then it returns \textsc{no} and provides a constraint that $x$ violates.
+\begin{theorem}
+Given a linear program and a valid separation oracle, there exists an algorithm that does the following:
+\vspace{-1em}
+\begin{enumerate}[i.]
+\item Solves for the optimal solution of the linear program.
+\item Runs in polynomial time with respect to the number of variables in the LP as well as the bit-wise complexity of encoding any one constraint.
+\end{enumerate}
+\end{theorem}
+
+Using the Ellipsoid Method to solve LP~\ref{eq:primal-lp} requires us to exhibit a polynomial-time separation oracle that distinguishes the feasibility of $x$.
+
+\noindent\fbox {
+\parbox{45.5em} {
+\textbf{Separation Oracle}
+
+Given a potential solution $x$ to linear program~\ref{eq:primal-lp}, do the following:
+
+\begin{quote}
+\begin{enumerate}[1.]
+\item Check if all $x_e \geq 0$. Return \textsc{no} and $x_e$ if any $x_e < 0$.
+
+\item Construct the graph $G' = (V, E)$ with edges weighted by $x_e$.
+
+\item For all $i = 1, \ldots, k$, compute the shortest path $p_i$ between $s_i$ and $t_i$ on $G'$.
+
+\item If the length of any $p_i$ is less than $1$, then return \textsc{no} and the violated constraint:
+\begin{equation*}
+\sum_{e \in p_i} x_e \geq 1
+\end{equation*}
+
+\item Return \textsc{yes} otherwise.
+\end{enumerate}
+\end{quote}
+}
+}
+\vspace{1em}
+
+Notice that this certainly runs in polynomial time with respect to the size of the graph. We need only perform $k$ shortest path computations and a linear pass through all $x_e$'s. All that remains is to show that this is a valid separation oracle.
+
+\begin{claim}
+The separation oracle returns \textsc{yes} if and only if the given $x$ is feasible.
+\end{claim}
+\begin{proof}
+Suppose $x$ is feasible, then $x_e \geq 0$ for all $e \in E$ implying step (1) will not fail. Now consider any $s_i$, $t_i$ pair. Since $x$ is feasible, the following constraint holds for all $P \in \mathcal{P}_i$.
+\begin{equation*}
+\sum_{e \in P} x_e \geq 1
+\end{equation*}
+
+However, this sum is exactly the length of $P$ in graph $G'$. Since the length of any path $P \in \mathcal{P}_i$ is at least 1, the shortest path $p_i$ will also have distance at least 1 implying step (4) will not fail. The oracle will correctly return \textsc{yes}.
+
+Now suppose $x$ is not feasible. Then either $x_e < 0$, for which step (1) will fail, or $\sum_{e \in P} x_e < 1$ for some $P \in \mathcal{P}_i$. If the length of $P$ is less than 1, then the length of the shortest path between $s_i$ and $t_i$ will be less than 1 as its length is at most that of $P$. It follows that step (4) will fail and the oracle will correctly return \textsc{no}.
+\end{proof}

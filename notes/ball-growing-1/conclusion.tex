@@ -1,0 +1,15 @@
+\section{Final Remarks}
+
+We highlighted two key ideas in this note. First, we construct a metric LP relaxation to capture metric structure that is ultimately useful for rounding the solution. This strategy can be traced to a paper by Leighton and Rao~\cite{LR88}\cite{LR99} where they use this to construct low-cost graph partitions for various cut problems. Another result by Arora, Rao, Vazirani~\cite{ARV09} uses this idea (and many more sophisticated ideas) to round a semidefinite programming relaxation for uniform sparsest cut and produce an $O(\sqrt{\log n})$-approximation.
+
+We also described ball-growing, a method of constructing cuts that charge the cost of the boundary to its volume. The probabilistic proof of theorem~\ref{thm:region-growing} is more aligned with how ball-growing is described in literature. One often sees a procedure similar to the following describing the process.
+\vspace{-1em}
+\begin{enumerate}[1.]
+\item Pick an arbitrary vertex of the graph $u'$ and start growing a ball $\mathcal{B}(u', r)$ around $u'$.
+
+\item Increment $r = r + \Delta r$, until a certain condition (such as the size of the boundary being bounded by the volume with some factor $\alpha$) is met.
+
+\item Remove $\mathcal{B}(u', r)$ and all edges adjacent to it. Repeat until no vertices remain.
+\end{enumerate}
+
+The probabilistic argument then demonstrates the existence of an $r$ that meets the condition and, with an appropriate choice of $\Delta r$, the algorithm will terminate in time polynomial with respect to the size of the graph. The condition upon which a ball is removed can be fluid. For example, the argument can be tweaked to construct \emph{low-diameter} decompositions of a graph -- one where each cluster has boundary size bounded by volume and low shortest path length diameter. This has many uses. Kelner and M\k{a}dry~\cite{KM09} use a low-diameter decomposition to construct a fast algorithm for sampling random spanning trees (a primitive useful for problems like maxflow and solving certain linear systems), while Trevisan~\cite{Tre05} uses this to construct better approximation algorithm for solving Unique Games.

@@ -1,0 +1,161 @@
+\section{Multicut and its Linear Programming Relaxations}
+
+Given a graph $G = (V, E)$, edge costs $c_e \geq 0$, and a set of source-sink vertex pairs $\{ (s_i, t_i): i = 1, \ldots, k \}$, the multicut problem asks for $F \subseteq E$ that, when removed, separates each $s_i, t_i$ with minimal cost according to
+\begin{equation*}
+\textup{cost}(F) = \sum_{e \in F} c_e
+\end{equation*}
+
+The multicut problem is not only $\NP$-hard in general, but is also $\NP$-hard when $G$ is restricted to be a trees. It is also known to be $\APX$-hard due to a reduction to the Unique Games Conjecture~\cite{CKKRS06}.
+
+\begin{theorem}
+Assuming the Unique Games Conjecture, there does not exist an $\alpha$-approximation for multicut for any $\alpha \geq 1$ unless $\ClassP = \NP$.
+\end{theorem}
+
+A stronger version of the Unique Games Conjecture demonstrates that there does not exist an $O(\log \log n)$ approximation unless $\ClassP = \NP$. It is currently an open problem to design an approximation algorithm that matches the lower bound. For these notes, we will present a $4\ln(k+1)$-approximation algorithm due to Garg, Vazirani, and Yannakakis. The algorithm first performs a linear programming relaxation, then rounds the solution using a procedure known as \emph{ball-growing} which is applicable as the LP relaxation benefits from certain \emph{metric} properties. Let us first construct a easily interpretable LP relaxation whose metric properties are not immediately evident.
+
+% --------------------------------------------------------------------
+% A PATH-BASED LP RELAXATION
+% --------------------------------------------------------------------
+
+\subsection{A Path-Based LP Relaxation}
+
+We begin with the multicut integer program. First, define decision variables for each edge $e$.
+\begin{equation*}
+x_e = \begin{cases}
+1 & \text{if }e \text{ is removed} \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+
+Our objective is then to minimize the cost of $F$. The objective function is
+\begin{equation*}
+\text{cost}(F) = \sum_{e \in E} c_e x_e
+\end{equation*}
+
+Finally, we must constrain our integer program to return an assignment that cuts each $s_i$ and $t_i$ pair. We know that $s_i$, $t_i$ are cut by $F$ if an edge on each path between the two vertices is removed. Let $\mathcal{P}_i$ be the set of all $s_i$ to $t_i$ paths. It suffices for us to ensure that at least one edge admits $x_e = 1$ for every $P \in \mathcal{P}_i$. This is equivalent to adding the constraints
+\begin{equation*}
+\sum_{e \in P} x_e \geq 1
+\qquad \forall P \in \mathcal{P}_i \quad \forall i = 1, \ldots, k
+\end{equation*}
+
+This gives our integer program. The linear programming relaxation of this replaces the integrality constraint with $x_e \geq 0$. The LP relaxation for multicut is then the following.
+\begin{equation}\label{eq:primal-lp}
+\begin{aligned}
+& \text{minimize}
+& & \sum_{e \in E} c_e x_e & \\
+& \text{subject to}
+& & \sum_{e \in P} x_e \geq 1 & & \forall P \in \mathcal{P}_i & & \forall i = 1, \ldots, k \\
+& & & x_e \geq 0 & & \forall e \in E
+\end{aligned}
+\end{equation}
+
+An algorithm that rounds this LP will first need to solve for $x_e$. But there is an immediate issue: there could be exponentially many path constraint with respect to the size of the graph! There are two ways to get around this. First is to derive an alternative LP relaxation that has polynomially many constraints, while second is to employ the \emph{Ellipsoid Method}, a procedure that can solve exponentially sized linear programs provided that one can demonstrate the existence of a \emph{separation oracle}. We'll instead demonstrate a polynomially sized, relaxation for multicut that more clearly highlights the metric structure that exists in multicut.
+
+% --------------------------------------------------------------------
+% A METRIC LP RELAXATION
+% --------------------------------------------------------------------
+
+\subsection{A Metric LP Relaxation}
+
+Consider a valid multicut $F$ and define the indicator function $d_{F}: V \times V \rightarrow \{ 0, 1 \}$ on pairs of vertices that are separated when $F$ is removed.
+\begin{equation*}
+d_F(u, v) = \begin{cases}
+1 & \text{ if } u \text{ and } v \text{ are separated by } F \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+
+This function defines a \emph{metric}\footnote{Actually, $d_F$ is called a semi-metric as $d_F(u, v) = 0$ does not necessarily imply $u = v$ as usually required by metrics.} over pairs of vertices in $G$. It holds that $d_F(u, u) = 0$ for any vertex $u$, is non-negative, symmetric, and satisfies the triangle inequality. To see that $d_F$ satisfies the triangle inequality, consider any three distinct vertices $u, v, w$. Since distances are $\{ 0, 1 \}$, we need only verify that the triangle with two sides 0 never exists. It cannot exist because any cut which separates two of $u, v, w$ must remove two sides of the triangle.
+
+The function $d_F$ is often called the \emph{cut metric} induced by the partition. It is a 0-1 metric defined over all pairs of vertices. The multicut problem thus asks for the minimum cost metric among all cut metrics separating each $s_i$, $t_i$ pair. A valid relaxation of this problem would then be to ask for the minimum cost metric among \emph{all metrics} separating each $s_i$, $t_i$ pair. To formulate this relaxation as a linear program, we begin by noting that the metric constraints can be encoded via linear expressions. If $x_{uv}$ denotes the distance between two vertices $u, v$, we can write the constraints as
+\begin{equation*}
+\begin{aligned}
+& x_{uv} + x_{vw} \geq x_{uw} & & \forall u \neq v \neq w & & \text{triangle inequality} \\
+& x_{uv} = x_{vu} & & \forall u, v \in V & & \text{symmetry} \\
+& x_{uv} \geq 0 & & \forall u, v \in V & & \text{non-negativity}
+\end{aligned}
+\end{equation*}
+
+Next, to enforce that the metric separates each $s_i$, $t_i$ pair, we need only to ensure that the distance between the source and sink is at least 1. For each $i$, we add the constraint $x_{s_i, t_i} \geq 1$. We can thus write the following \emph{metric} LP relaxation for multicut.
+\begin{equation}\label{eq:metric-lp}
+\begin{aligned}
+& \text{minimize}
+& & \sum_{u, v \in V} c_{uv} x_{uv} & \\
+& \text{subject to}
+& & x_{uv} + x_{vw} \geq x_{uw} & & \forall u \neq v \neq w \\
+& & & x_{s_i, t_i} \geq 1 & & \forall i = 1, \ldots, k \\
+& & & x_{uv} \geq 0 & & \forall u, v \in V
+\end{aligned}
+\end{equation}
+
+Note we need not write the symmetry constraint as the edge costs are symmetric. It is worth checking that this is a valid relaxation of multicut.
+
+\begin{claim}\label{claim:metric-valid}
+Let $x$ be an integral solution to LP~\ref{eq:metric-lp}. Then removing any $e$ where $x_{e} = 1$ removes a valid multicut.
+\end{claim}
+\begin{proof}
+Suppose not; then there is a pair $s_i, t_i$ with a path $P$ such that each edge $e \in P$ admits $x_e = 0$. Intuitively, this violates the triangle inequality as the direct distance $x_{s_i, t_i}$ should be the shortest distance between $s_i, t_i$ of which the constraint $x_{s_i, t_i} \geq 1$ dictates must be at least 1.
+
+More precisely, imagine a new graph $G'$ constructed from $G$ with its edges weighted by $x_e$. We claim that $x_{s_i, t_i}$ denotes the shortest path distance between $s_i, t_i$ in $G'$. Consider any other $s_i, t_i$ path $P$ and write it as
+\begin{equation*}
+s_i
+\quad u_1
+\quad \ldots
+\quad u_\ell
+\quad t_i
+\end{equation*}
+
+Now, the triangle inequality allows us to write a sequence of inequalities like so
+\begin{equation*}
+x_{s_i, u_1} + x_{u_1, t_i} \geq x_{s_i, t_i}
+\qquad\qquad
+x_{u_1, u_2} + x_{u_2, t_i} \geq x_{u_1, t_i}
+\qquad\qquad
+\ldots
+\qquad\qquad
+x_{u_{\ell - 1}, u_\ell} + x_{u_\ell, t_i} \geq x_{u_{\ell - 1}, t_i}
+\end{equation*}
+
+Together, these inequalities imply the following relation
+\begin{equation*}
+x_{s_i, u_1} + x_{u_1, u_2} + \ldots + x_{u_{\ell - 1}, u_\ell} + x_{u_\ell, t_i} \geq x_{s_i, t_i}
+\end{equation*}
+
+The LHS is the length of $P$ while the RHS is the weight of the edge $(s_i, t_i)$ in $G'$. Thus the length of any $s_i, t_i$ path in $G'$ must be at least $x_{s_i, t_i}$. Now, if there is a path $P$ such that $x_e = 0$ for $e \in P$ then its length in $G'$ is 0 contradicting the fact that the shortest $s_i, t_i$ path must have length at least 1.
+\end{proof}
+
+One thing to note about this relaxation is that the metric is defined over all pairs of vertices, but the given graph may not have an edge between each vertex pair. It suffices to let $c_{uv} = 0$ whenever $(u, v) \notin E$ as cutting an edge that does not exist in the graph does not contribute to the cost of the cut.
+
+\subsection{Metric Completions}
+
+Given a solution to LP~\ref{eq:metric-lp}, we can construct an alterate LP solution by performing a \emph{metric completion}. For every pair of vertices $u, v \in V$, the metric completion of $x$ assigns $\hat{x}_{uv}$ to be the length of the shortest path between $u$ and $v$ in the graph $G$ whose edges $e$ are weighted as $x_e$. That is if we denote $\mathcal{P}_{uv}$ as the set of all paths from $u$ to $v$, $\hat{x}_{uv}$ is given by
+\begin{equation*}
+\hat{x}_{uv} = \min_{P \in \mathcal{P}_{uv}} \sum_{e \in P} x_e
+\end{equation*}
+
+Notice that $\hat{x}_{uv}$ is both a feasible and optimal solution for LP~\ref{eq:metric-lp}.
+
+\begin{claim}\label{claim:metric-completion}
+Given a solution $x$ to LP~\ref{eq:metric-lp}, its metric completion $\hat{x}$ is feasible and optimal.
+\end{claim}
+\begin{proof}
+Notice that $\hat{x}_{uv}$ automatically forms a metric between all pairs of vertices as shortest path distances satisfy the triangle inequality. Thus to demonstrate feasibility, we need only verify that $\hat{x}_{s_i, t_i} \geq 1$ for each $i$. However, the argument for claim~\ref{claim:metric-valid} demonstrates that $\hat{x}_{s_i, t_i} = x_{s_i, t_i} \geq 1$ since $x_{s_i, t_i}$ is the shortest path length between $s_i, t_i$ in a graph weighted by $x_e$'s.
+
+To demonstrate optimality, notice that the objective value of $\hat{x}$ is equivalent to that of $x$. For any $e \in E$, we have that $\hat{x}_e \leq x_e$. This is because $\hat{x}_e$ is the length of the shortest path between the endpoints of $e$. Taking just the edge $e$ is one such path, thus the length of the shortest path can only be shorter than $x_e$. Consequently, the objective value of $\hat{x}$ is at most
+\begin{equation*}
+\sum_{e \in E} c_e \hat{x}_e \leq \sum_{e \in E} c_e x_e
+\end{equation*}
+
+Because $x$ is an optimal solution to the LP, $\hat{x}$ must be an optimal solution as well.
+\end{proof}
+
+Optimality in claim~\ref{claim:metric-completion} actually follows for a simpler reason -- $\hat{x}_e = x_e$ for any $e \in E$ thus the two objective values are in fact equal. The reason why the above argument is provided is because it also applies to demonstrating that the metric completion of a solution to the path-based relaxation~\ref{eq:primal-lp} is optimal and feasible for LP~\ref{eq:primal-lp}.
+
+In fact, performing a metric completion tells us how to relate the above two LP relaxations together since the completion of a solution to either LP makes it feasible for the other. The metric completion of a solution to the metric relaxation~\ref{eq:metric-lp} is feasible for the path-based LP~\ref{eq:primal-lp} because it will satisfy the following constraints:
+\begin{equation*}
+\sum_{e \in P} \hat{x}_e \geq 1
+\qquad\qquad\qquad\qquad
+\forall P \in \mathcal{P}_i \; \forall i = 1, \ldots, k
+\end{equation*}
+
+The metric relaxation requires $x_{s_i, t_i} \geq 1$. The value of $x_{s_i, t_i}$ is also the shortest path length between $s_i, t_i$. Thus any other path must have length at least 1. In the other direction, we can show that the metric completion of $x$ the solution to the path-based LP relaxation~\ref{eq:primal-lp} is also a feasible and optimal solution for that LP. It is then feasible for LP~\ref{eq:metric-lp} as shortest path distances automatically satisfy the triangle inequality, and $\hat{x}_{s_i, t_i} \geq 1$ for all $i$ because $\sum_{e \in P} x_e \geq 1$ for any path $P$ between $s_i, t_i$.

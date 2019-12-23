@@ -1,0 +1,68 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{../../lib/approx-scribe}
+
+\usepackage[T1]{fontenc}
+
+\allowdisplaybreaks
+
+\begin{document}
+
+\lecture{11}{Ball-Growing and Multicut}{Antares Chen}{5/10/2019}
+
+
+% --------------------------------------------------------------------
+% INTRODUCTION
+% --------------------------------------------------------------------
+\input{introduction.tex}
+
+
+% --------------------------------------------------------------------
+% MULTICUT PROBLEM + RELAXATION
+% --------------------------------------------------------------------
+\input{relaxation.tex}
+
+
+% --------------------------------------------------------------------
+% ROUNDING ALGORITHM + CORRECTNESS
+% --------------------------------------------------------------------
+\input{rounding.tex}
+
+
+% --------------------------------------------------------------------
+% BALL GROWING
+% --------------------------------------------------------------------
+\input{ball-growing.tex}
+
+
+% --------------------------------------------------------------------
+% CONCLUSION
+% --------------------------------------------------------------------
+\input{conclusion.tex}
+
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+\bibitem{ARV09}
+Arora, S., Rao, S., \& Vazirani, U. (2009). ``Expander flows, geometric embeddings and graph partitioning.'' In \emph{Journal of the ACM (JACM)}, 56(2), 5.
+
+\bibitem{CKKRS06}
+Chawla, S., Krauthgamer, R., Kumar, R., Rabani, Y., \& Sivakumar, D. (2006). ``On the hardness of approximating multicut and sparsest-cut.'' In \emph{computational complexity}, 15(2), 94-114.
+
+\bibitem{GVY96}
+Garg, N., Vazirani, V. V., \& Yannakakis, M. (1996). ``Approximate max-flow min-(multi) cut theorems and their applications.'' In \emph{SIAM Journal on Computing}, 25(2), 235-251.
+
+\bibitem{KM09}
+Kelner, J. A., \& Madry, A. (2009, October). ``Faster generation of random spanning trees''. In \emph{2009 50th Annual IEEE Symposium on Foundations of Computer Science} (pp. 13-21). IEEE.
+
+\bibitem{LR88}
+Leighton, T., \& Rao, S. (1988). ``An approximate max-flow min-cut theorem for uniform multicommodity flow problems with applications to approximation algorithms.'' In \emph{[Proceedings 1988] 29th Annual Symposium on Foundations of Computer Science}. (pp. 422-431). IEEE.
+
+\bibitem{LR99}
+Leighton, T., \& Rao, S. (1999). ``Multicommodity max-flow min-cut theorems and their use in designing approximation algorithms.'' In \emph{Journal of the ACM (JACM)}, 46(6), 787-832.
+
+\bibitem{Tre05}
+Trevisan, L. (2005). ``Approximation algorithms for unique games.'' In \emph{46th Annual IEEE Symposium on Foundations of Computer Science} (pp. 197-205). IEEE.
+\end{thebibliography}
+
+\end{document}

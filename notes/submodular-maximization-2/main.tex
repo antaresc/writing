@@ -1,0 +1,344 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{../../lib/approx-scribe}
+
+\usepackage{todonotes}
+
+
+\begin{document}
+\lecture{4}{Submodular Maximization Part 2}{Antares Chen}{3/6/2019}
+
+We conclude our discussion of maximizing submodular functions with the double greedy algorithm for unconstrained submodular maximization due to Buchbinder, Feldman, Naor, and Schwartz~\cite{BFSS15}.
+
+\section{Unconstrained Submodular Maximization}
+
+Previously, we provided two examples for problems that are modeled by maximizing a submodular function under cardinality constraints: maximizing float among bank accounts, and maximizing social influence. However, many more problems are captured when cardinality constraints and guaranteed monotonicity are not provided.
+
+Recall the problem of maxcut. Given $G = (V, E)$ where each edge has weight $w_e$, our goal is to choose a cut such that the total weight of edges crossing the cut is maximized. More precisely, we wish to find $S \subseteq V$ such that the following function is maximized.
+\begin{equation}\label{eqn:maxcut}
+f(S) = \sum_{e \in E(S, V - S)} w_e
+\end{equation}
+
+where $E(S, V - S) = \{ (u, v) \in E: u \in S \textup{ and } v \in V - S \}$. The objective function for maxcut is submodular.
+\begin{claim}
+For a graph $G = (V, E)$ with edge weights $w_e$, the function $f$ defined in equation~\ref{eqn:maxcut} is submodular.
+\end{claim}
+\begin{proof}
+
+\end{proof}
+
+However, the objective functions is not monotone. Consider the following example:\todo{insert example}
+
+\section{Maximizing Non-monotone Submodular Functions}
+
+Let us precisely define the problem of maximizing a non-monotone submodular function, sometimes called \emph{unconstrained submodular maximization}. Given $E = [n]$ a ground set of elements, we wish to choose $S \subseteq E$ such that a submodular function $f: 2^E \rightarrow \mathbb{R}_{\geq 0}$ is maximized. We now present the double greedy algorithm due to Buchbinder, Feldman, Naor, and Schwartz. The algorithm provided a simple resolution to a problem that had been studied since the 1960s. We further discuss the history of this problem in the \hyperref[sec:conclusion]{\emph{Concluding Remarks}} section.
+
+\subsection{The Double Greedy Algorithm}
+
+The double greedy algorithm iterates through elements of $E$ deciding whether or not to add an element $i$ to a maintained solution by computing what is gained by adding $i$ or ignoring it. More precisely, if $E = [n]$ is our ground set and $f: 2^E \rightarrow \mathbb{R}_{\geq 0}$ our submodular function, then the algorithm proceeds as follows:
+
+\noindent\fbox {
+\parbox{45.5em} {
+\textbf{Double Greedy}
+
+Given ground set $E$ and submodular function $f: 2^E \rightarrow \mathbb{R}_{\geq 0}$, initialize $X_0 = \varnothing$. Do for $i = 1, \ldots, n$:
+
+\begin{quote}
+\begin{enumerate}[1.]
+\item Compute $a_i$ and $r_i$ according to the following:
+\begin{equation*}
+a_i = f(X_{i-1} \cup \{ i \}) - f(X_{i-1})
+\qquad\qquad
+r_i = f(\hat{X}_{i-1} - \{ i \}) - f(\hat{X}_{i-1})
+\end{equation*}
+
+\item If $a_i \geq 0$ and $r_i < 0$, then update:
+\begin{equation*}
+X_i = X_{i-1} \cup \{ i \}
+\end{equation*}
+
+\item If $r_i \geq 0$ and $a_i < 0$, then update:
+\begin{equation*}
+X_i = X_{i-1}
+\end{equation*}
+
+\item If $a_i \geq 0$ and $r_i \geq 0$, then randomly update $X_i$ according to the following probability:
+\begin{equation*}
+X_i = \begin{cases}
+X_{i-1} \cup \{ i \} & \text{w.p. } \frac{a_i}{a_i + r_i} \\
+X_{i-1} & \text{w.p. } \frac{r_i}{a_i + r_i}
+\end{cases}
+\end{equation*}
+\end{enumerate}
+\end{quote}
+}
+}
+\vspace{1em}
+
+This algorithm iteratively builds a solution $X_i$ and it decides whether or not to add $i$ based on computing $a_{i}$ and $r_{i}$. These two values measure what is gained in $f$ if $i$ is either added to $X_{i-1}$ or ignored.
+\vspace{-1em}
+\begin{enumerate}[-]
+\item If one gains more by adding $i$, i.e. $a_i \geq 0$ while $r_i < 0$, then $i$ should be added to $X_{i-1}$.
+
+\item If one gains more by ignoring $i$, i.e. $r_i \geq 0$ while $a_i < 0$, then $i$ should be ignored.
+\end{enumerate}
+
+But what should one do when adding and ignoring $i$ both increase the value of the solution the algorithm maintains? Why not flip a biased coin. Add $i$ to $X_{i-1}$ with probability weighted by how much is gained by either action. Indeed, this is why the algorithm is called ``double greedy.'' It greedily chooses either to add or ignore $i$ depending on how much it benefits the cost of the maintained solution. If either choice yields benefit, then tiebreak randomly.
+
+One may notice that there is a forth case. What if both actions decrease the value of the maintained solution, i.e $a_i < 0$ and $r_i < 0$. This is not possible! Doing something will always increase the cost of $X_i$. Before showing this, let us first define the set $\hat{X}_i$ as follows:
+\begin{equation*}
+\hat{X}_i = X_i \cup \{ i+1, \ldots, n \}
+\end{equation*}
+
+Think of $\hat{X}_i$ as the set of items that are in $X_i$ along with what could potentially be added in future iterations. It is not always the case that $\hat{X}_i \neq X_i$ always, but it does hold in general that
+\begin{equation*}
+\hat{X}_0 = E
+\qquad\qquad\qquad
+X_i \subseteq \hat{X}_i
+\qquad\qquad\qquad
+X_n = \hat{X}_n
+\end{equation*}
+
+Let's also think of how $\hat{X}_i$ changes based on whether step 2 or 3 is executed in the double greedy algorithm.
+\vspace{-1em}
+\begin{enumerate}[-]
+\item If $a_i \geq 0$ and $r_i < 0$, then $\hat{X}_i = \hat{X}_{i-1}$ as $i$ is added to $X_{i-1}$
+
+\item If $a_i < 0$ and $r_i \geq 0$, then $\hat{X}_i = \hat{X}_{i-1} - \{ i \}$ as $i$ is will never be considered for addition in the future.
+\end{enumerate}
+
+We now prove that doing anything always benefits the cost of the maintained solution.
+\begin{claim}\label{claim:do-something}
+$a_i + r_i \geq 0$ for all $i$.
+\end{claim}
+\begin{proof}
+Notice that $X_{i-1} \subseteq \hat{X}_{i-1} - \{ i \}$. By submodularity, we have that
+\begin{equation*}
+f(\hat{X}_{i-1}) - f(\hat{X}_{i-1} - \{ i \}) \leq f(X_{i-1} \cup \{ i \}) - f(X_i)
+\end{equation*}
+
+However, $\hat{X}_{i-1} = (\hat{X}_{i-1} - \{ i \}) \cup \{ i \}$ meaning the above inequality becomes
+\begin{equation*}
+f((\hat{X}_{i-1} - \{ i \}) \cup \{ i \}) - f(\hat{X}_{i-1} - \{ i \}) \leq f(X_{i-1} \cup \{ i \}) - f(X_i)
+\end{equation*}
+
+The LHS of that above is $-r_i$ while the RHS is $a_i$. Thus $-r_i \leq a_i$ which is equivalent to that required.
+\end{proof}
+
+\subsection{Analysis}
+
+Since maxcut is an $\NP$-hard problem, we cannot expect to determine the optimal set $S \subseteq E$ that maximizes a submodular $f$ efficiently unless $\ClassP = \NP$. Thus we seek to bound the approximation ratio of a solution produced from this algorithm. Let $\opt \subseteq E$ be the optimal solution and define $\opt_i$ as follows:
+\begin{equation*}
+\opt_i = X_i \cup (\opt \cap \{ i+1, \ldots, n \})
+\end{equation*}
+
+Consider $\opt_i$ as a sliding window of elements from $\opt$ to $X_i$ since we have $\opt_0 = \opt$ while $\opt_n = X_n$. Because the double-greedy algorithm is stochastic, our statements will hold in expectation. More precisely, we will require the following lemma.
+\begin{lemma}\label{lem:big-boi}
+For all $i = 1, \ldots, n$, the following holds
+\begin{equation}\label{eqn:big-boi}
+\expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+\leq \frac{1}{2} \cdot \expect \big[ (f(X_i) - f(X_{i-1})) + (f(\hat{X}_i) - f(\hat{X}_{i-1})) \big]
+\end{equation}
+\end{lemma}
+
+We defer the proof of this statement for now and show how this implies a bound on the approximation ratio.
+\begin{theorem}
+The double greedy algorithm provides a $\frac{1}{2}$-approximation for non-monotone submodular maximization on expectation.
+\end{theorem}
+\begin{proof}
+Consider the sum $\sum_{i=1}^n \expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]$ and notice lemma~\ref{lem:big-boi} implies the following bound
+\begin{align*}
+\sum_{i=1}^n \expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+&\leq \frac{1}{2} \cdot \sum_{i=1}^n \expect \big[ (f(X_i) - f(X_{i-1})) + (f(\hat{X}_i) - f(\hat{X}_{i-1})) \big] \\
+&= \frac{1}{2} \cdot \bigg( \sum_{i=1}^n \big( \expect[ f(X_i) ] - \expect[ f(X_{i-1}) ] \big) + \sum_{i=1}^n \big( \expect[ f(\hat{X}_i) ] - \expect[ f(\hat{X}_{i-1}) ] \big) \bigg)
+\end{align*}
+
+Both sums are telescoping thus we have
+\begin{equation*}
+\sum_{i=1}^n \expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+\leq \frac{1}{2} \cdot \big( \expect[ f(X_n) ] - \expect[ f(X_0) ] + \expect[ f(\hat{X}_n) ] - \expect[ f(\hat{X}_0) ] \big)
+\end{equation*}
+
+Notice that $f(X_0) = f(\varnothing) = 0$ while $f(\hat{X}_n) = f(X_n)$ implying $\expect[ f(X_n) ]$ is also 0. Meanwhile, $f(\hat{X}_0) = f(E)$ meaning $\expect[ f(\hat{X}_0) ]$ is a constant that is at least 0. We can conclude that
+\begin{align*}
+\frac{1}{2} \cdot \big( \expect[ f(X_n) ] - \expect[ f(X_0) ] + \expect[ f(\hat{X}_n) ] - \expect[ f(\hat{X}_0) ] \big)
+&\leq \frac{1}{2} \cdot \big( \expect[ f(X_n) ] + \expect[ f(\hat{X}_n) ] \big) \\
+&= \frac{1}{2} \cdot \big( \expect[ f(X_n) ] + \expect[ f(X_n) ] \big) \\
+&= \expect[ f(X_n) ]
+\end{align*}
+
+However, $\sum_{i=1}^n \expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]$ is telescoping and equal to
+\begin{equation*}
+\sum_{i=1}^n \expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+= \expect \big[ f(\opt_0) \big] - \expect \big[ f(\opt_n) \big]
+= f(\opt) - \expect \big[ f(X_n) \big]
+\end{equation*}
+
+Thus we have
+\begin{equation*}
+f(\opt) - \expect \big[ f(X_n) \big]
+\leq \expect[ f(X_n) ]
+\qquad\qquad\Longrightarrow\qquad\qquad
+\expect[ f(X_n) ] \geq \frac{1}{2} \cdot f(\opt)
+\end{equation*}
+
+as required.
+\end{proof}
+
+The final step in our analysis is to demonstrate lemma~\ref{lem:big-boi}. The proof of this lemma proceeds by checking that inequality~\ref{eqn:big-boi} holds for every conceivable case of the algorithm. Our case work splits based on whether or not $i \in \opt$, $a_i \geq 0$ and $r_i \geq 0$ for every iteration $i$. As a broad overview of the proof, notice for the cases where $a_i \geq 0$ and $r_i < 0$ as well as $a_i < 0$ and $r_i \geq 0$ the element $i$ is added / ignored deterministically, thus we need not concern ourselves with computing an expectation. Additionally, we would have that $a_i \geq r_i$ or $r_i \geq a_i$ respectively. The brunt of the proof is thus use submodularity to appropriately relate the left and right side of inequality~\ref{eqn:big-boi} to either $a_i$ or $r_i$ then use the fact that either $a_i \geq r_i$ or $r_i \geq a_i$ to conclude the inequality.
+
+In the case where we need to flip a biased coin, we fall back to the first two cases with a certain weighted probability. Consequently, the expectation that we need to compute recycles the same computation performed in the first two cases of our analysis. We will provide a sketch of the argument for the case when $i \notin \opt$. The analysis for $i \in \opt$ is similar.
+
+\begin{proof}[Proof sketch of lemma~\ref{lem:big-boi}]
+Assume that $i \notin \opt$. We verify inequality~\ref{eqn:big-boi} for the following cases.
+\begin{enumerate}
+\item Suppose $a_i \geq 0$ and $r_i < 0$: element $i$ is added to the maintained solution $X_{i-1}$ deterministically. Since $i \notin \opt$, we have that
+\begin{equation*}
+\opt_{i-1} = X_{i-1} \cup (\opt \cap \{ i, \ldots, n \}) \subseteq (X_i \cup \{ i + 1, \ldots, n \}) - \{ i \} = \hat{X}_i - \{ i \}
+\end{equation*}
+
+thus by submodularity of $f$, we can conclude that
+\begin{equation*}
+f((\hat{X}_{i-1} - \{ i \}) \cup \{ i \}) - f(\hat{X}_{i-1} - \{ i \})
+\leq f(\opt_{i-1} \cup \{ i \}) - f(\opt_{i-1})
+\end{equation*}
+
+Now, there are a couple things to notice about this inequality. Focusing on the LHS, we have that $\opt_{i-1} \cup \{ i \} = \opt_i$ because $i$ is added to $X_{i-1}$. Next consider the RHS. The set $(\hat{X}_{i-1} - \{ i \}) \cup \{ i \}$ is just $\hat{X}_{i-1}$ meaning the RHS is equivalent to $f(\hat{X}_{i-1}) - f(\hat{X}_{i-1} - \{ i \})$, but $f(\hat{X}_{i-1}) - f(\hat{X}_{i-1} - \{ i \}) = -r_i$ by definition. This reasoning allows us to conclude:
+\begin{equation}\label{eqn:case-1-lhs}
+f(\opt_{i-1}) - f(\opt_i) \leq r_i
+\end{equation}
+
+Let us now expand $\frac{1}{2} \cdot a_i$.
+\begin{equation}\label{eqn:case-1-rhs}
+\frac{1}{2} \cdot a_i
+= \frac{1}{2} \cdot \big( f(X_i \cup \{ i \}) - f(X_{i-1}) \big)
+= \frac{1}{2} \cdot \big( (f(X_i \cup \{ i \}) - f(X_{i-1})) + (f(\hat{X}_i) - f(\hat{X}_{i-1})) \big)
+\end{equation}
+
+The addition of term $f(\hat{X}_i) - f(\hat{X}_{i-1})$ follows as $f(\hat{X}_i) - f(\hat{X}_{i-1}) = 0$. This is because $\hat{X}_i = \hat{X}_{i-1}$ since $i$ is added to $X_{i-1}$. By assumption $r_i < 0$ and $a_i \geq 0$ thus $r_i \leq \frac{1}{2} \cdot a_i$. The above calculations combine to derive the required inequality.
+
+\item Suppose $a_i < 0$ and $r_i \geq 0$: element $i$ is ignored from the maintained solution meaning $X_{i-1} = X_i$. Consequently $\opt_{i-1} = \opt_i$. We thus have that
+\begin{equation}\label{case-2-lhs}
+f(\opt_{i-1}) - f(\opt_i) = 0
+\end{equation}
+
+Certainly, $0 \leq \frac{1}{2} \cdot r_i$ thus expanding out $r_i$ derives
+\begin{equation}\label{case-2-rhs}
+\frac{1}{2} \cdot r_i
+= \frac{1}{2} \cdot \big( f(\hat{X}_{i-1} \cup \{ i \}) - f(\hat{X}_{i-1}) \big)
+= \frac{1}{2} \cdot \big( (f(X_i \cup \{ i \}) - f(X_{i-1})) + (f(\hat{X}_i) - f(\hat{X}_{i-1})) \big)
+\end{equation}
+
+The addition of term $f(X_i \cup \{ i \}) - f(X_{i-1})$ follows as $f(X_i \cup \{ i \}) - f(X_{i-1}) = 0$ because $X_i = X_{i-1}$. Combining our calculations for this case derives the required inequality.
+
+\item Suppose $a_i \geq 0$ and $r_i \geq 0$: With probability $\frac{a_i}{a_i + r_i}$ we fall into case 1, and with probability $\frac{r_i}{a_i + r_i}$ into case 2. However, in case 1, we have by inequality~\ref{eqn:case-1-lhs}
+\begin{equation*}
+f(\opt_{i-1}) - f(\opt_i) \leq r_i
+\end{equation*}
+
+while in case 2, inequality~\ref{case-2-lhs} implies
+\begin{equation*}
+f(\opt_{i-1}) - f(\opt_i) \leq 0
+\end{equation*}
+
+We can thus compute the expectation $\expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]$ as follows
+\begin{equation}\label{eqn:expect-LHS}
+\expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+\leq \frac{a_i}{a_i + r_i} \cdot r_i + \frac{r_i}{a_i + r_i} \cdot 0
+= \frac{a_i r_i}{a_i + r_i}
+\end{equation}
+
+Now the RHS of the required inequality~\ref{eqn:big-boi} can be written as
+\begin{equation*}
+\frac{1}{2} \cdot \expect \big[ f(X_i) - f(X_{i-1}) \big] + \frac{1}{2} \cdot \expect \big[ f(\hat{X}_i) - f(\hat{X}_{i-1}) \big]
+\end{equation*}
+
+Let's look at these two expectations separately. For $\expect \big[ f(X_i) - f(X_{i-1}) \big]$, we are in case 1 with probability $\frac{a_i}{a_i + r_i}$ and by equation~\ref{eqn:case-1-rhs}
+\begin{equation*}
+f(X_i) - f(X_{i-1}) = a_i
+\end{equation*}
+
+With probability $\frac{r_i}{a_i + r_i}$ we are in case 2, and because $\hat{X}_{i-1} = \hat{X}_i$, we have
+\begin{equation*}
+f(\hat{X}_i) - f(\hat{X}_{i-1}) = 0
+\end{equation*}
+
+Consequently, we derive
+\begin{equation*}
+\frac{1}{2} \cdot \expect \big[ f(X_i) - f(X_{i-1}) \big]
+= \frac{1}{2} \cdot \bigg( \frac{a_i}{a_i + r_i} \cdot a_i + \frac{r_i}{a_i + r_i} \cdot 0 \bigg)
+= \frac{1}{2} \cdot \frac{a_i^2}{a_i + r_i}
+\end{equation*}
+
+For $\expect \big[ f(\hat{X}_i) - f(\hat{X}_{i-1}) \big]$, case 1 admits $\hat{X}_i = \hat{X}_{i-1}$ thus
+\begin{equation*}
+f(\hat{X}_i) - f(\hat{X}_{i-1}) = 0
+\end{equation*}
+
+while case 2 admits
+\begin{equation}
+f(\hat{X}_i) - f(\hat{X}_{i-1}) = r_i
+\end{equation}
+
+by equation~\ref{case-2-rhs}. The expectation is thus:
+\begin{equation*}
+\frac{1}{2} \cdot \expect \big[ f(X_i) - f(X_{i-1}) \big]
+= \frac{1}{2} \cdot \bigg( \frac{a_i}{a_i + r_i} \cdot 0 + \frac{r_i}{a_i + r_i} \cdot r_i \bigg)
+= \frac{1}{2} \cdot \frac{r_i^2}{a_i + r_i}
+\end{equation*}
+
+Combining these two expectations, we derive
+\begin{equation}\label{eqn:expect-RHS}
+\frac{1}{2} \cdot \expect \big[ ( f(X_i) - f(X_{i-1}) ) + ( f(\hat{X}_i) - f(\hat{X}_{i-1}) ) \big]
+= \frac{1}{2} \cdot \frac{a_i^2 + r_i^2}{a_i + r_i}
+\end{equation}
+
+Now for any $a_i, r_i$ we have that
+\begin{equation*}
+\frac{a_i r_i}{a_i + r_i}
+\leq \frac{1}{2} \cdot \frac{a_i^2 + r_i^2}{a_i + r_i}
+\end{equation*}
+
+since $(a_i - r_i)^2 \geq 0$. By equations~\ref{eqn:expect-RHS} and~\ref{eqn:expect-LHS} we can conclude that
+\begin{equation*}
+\expect \big[ f(\opt_{i-1}) - f(\opt_i) \big]
+\leq \frac{1}{2} \cdot \expect \big[ ( f(X_i) - f(X_{i-1}) ) + ( f(\hat{X}_i) - f(\hat{X}_{i-1}) ) \big]
+\end{equation*}
+
+as required.
+\end{enumerate}
+
+By claim~\ref{claim:do-something}, we need not consider the case $a_i < 0$ and $r_i < 0$. In all cases, at least for $i \notin \opt$, the required inequality~\ref{eqn:big-boi} holds thus completing the proof sketch.
+\end{proof}
+
+\section{Concluding Remarks}\label{sec:conclusion}
+
+The search for an optimal approximation algorithm for maximizing a non-monotone submodular function has a storied history. The study of this problem first began in the 1960s. A number of algorithms discovered during this period either focused on special cases, or provided outputs without provable guarantees\todo{Cite some things}. It wasn't until 2007, when Feige, Mirrokni and Vondr\'{a}k first provided a rigorous study of the problem~\cite{FMV07}. In their paper, they prove the following hardness result:
+\begin{theorem}
+For any $\epsilon > 0$, there does not exist $(\frac{1}{2} + \epsilon)$-approximation algorithm for maximizing a non-monotone submodular function using polynomial number of queries to an oracle access.
+\end{theorem}
+
+Think of an access oracle as some black-box that provides the value of the submodular function $f$ given $S \subseteq E$. Additionally, they give a number of constant factor approximation algorithms for maximizing a non-montone submodular function -- notably a 0.4-approximation using local search.
+
+For the next five years, improvements to the approximation algorithm seemed to add complexity while only making incremental gains in the approximation ratio. Gharan and Vondr\'{a}k~\cite{GV11} first improved the algorithm to provide a 0.41-approximation using a technique called simulating annealing. Feldman, Naor, and Schwartz~\cite{FNS11} then provided a more nuanced analysis to increase the approximation ratio to 0.42. Finally in 2012, Buchbinder, Feldman, Naor, and Schwartz~\cite{BFSS15} published the 0.5-approximation discussed above, providing a remarkably simple algorithm that achieved optimality without requiring complex analysis seen in preceding work. The problem of derandomizing the double greedy algorithm was resolved only in the past year by~\cite{BF18}.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{99}
+\bibitem{BF18}
+N. Buchbinder, \& M. Feldman. ``Deterministic algorithms for submodular maximization problems.'' In \emph{ACM Transactions on Algorithms} (2018), 14(3), 32.
+
+\bibitem{BFSS15}
+N. Buchbinder, M. Feldman, J. Seffi, \& R. Schwartz. ``A tight linear time (1/2)-approximation for unconstrained submodular maximization.'' In \emph{SIAM Journal on Computing} (2015), 44(5), 1384-1402.
+
+\bibitem{FMV07}
+U. Feige, V. Mirrokni \& J. Vondr\'{a}k. ``Maximizing non-monotone submodular functions.'' In \emph{FOCS} (2007), 461–471.
+
+\bibitem{FNS11}
+M. Feldman, J. Naor, and R. Schwartz. ``Nonmonotone submodular maximization via a structural continuous greedy algorithm.'' In \emph{ICALP} (2011), 342–353.
+
+\bibitem{GV11}
+S. O. Gharan \& J. Vondr\'{a}k. ``Submodular maximization by simulated annealing.'' In \emph{SODA} (2011), 1098–1117
+\end{thebibliography}
+
+\end{document}

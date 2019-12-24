@@ -1,3 +1,5 @@
+% REMOVED SECTION ON THE ELLIPSOID METHOD
+
 \subsection{The Ellipsoid Method and A Separation Oracle for Multicut}
 
 Our LP rounding algorithm will first solve the linear program relaxation for a optimal continuous solution $x$. However, one look at relaxation~\ref{eq:primal-lp} raises an immediate issue. How can we efficiently solve the LP when there may be exponentially many paths between $s_i$ and $t_i$ in the given graph. There does exist a polynomial sized (with respect to the number of vertices and edges in the graph) LP relaxation for multicut. However, these notes will approach this problem using the \emph{Ellipsoid Method}.

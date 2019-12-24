@@ -52,18 +52,19 @@ f(S \cup T) \leq f(S) + f(T) - f(S \cap T)
 \end{equation}
 \end{definition}
 
-There are two ways of thinking about a submodular function. The first is that submodularity models a notion of ``diminishing returns''. Notice that inequality~\ref{eqn:submodular-def-1} states that, for $S \subseteq T$, one gains less by adding $\ell$ to $T$ compared to adding $\ell$ to $S$. This means that as more elements are added to the set of interest, the increase in the its cost diminishes.
+One way of thinking about submodular functions is that it models a notion of ``diminishing returns''. Notice that inequality~\ref{eqn:submodular-def-1} states that, for $S \subseteq T$, one gains less by adding $\ell$ to $T$ compared to adding $\ell$ to $S$. As more elements are added to the set of interest, the increase in cost decreases.
 
-\todo{Insert image about submodularity}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[scale=0.3192]{images/image-1.png}
+\end{figure}
 
-A second interpretation is that submodularity models a discretized analogue of convexity. If we have a function $f: X \rightarrow \mathbb{R}$ defined over a convex subset $X$ of (say) $\mathbb{R}^n$, then we would say $f$ is \emph{convex} if for all $x, y \in X$, the image of any point in the convex combination of $x$ and $y$ under $f$ is upperbounded by the convex combination of $f(x)$ and $f(y)$. That is to say for any $\lambda \in [0, 1]$ we have:
-\begin{equation*}
-f(\lambda x + (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)
-\end{equation*}
-
-For submodular $f$, its domain is discrete. Inequality~\ref{eqn:submodular-def-2} considers the discrete analogue of convex combination to be the union of two subsets $S, T$ and the upperbound of its image under $f$ to be given by the inclusion-exclusion principle.
-
-\todo{Insert image about submodularity}
+% A second interpretation is that submodularity captures a discretized analogue of convexity. If we have a function $f: X \rightarrow \mathbb{R}$ defined over a convex subset $X$ of (say) $\mathbb{R}^n$, then we would say $f$ is \emph{convex} if for all $x, y \in X$, the image of any point in the convex combination of $x$ and $y$ under $f$ is upperbounded by the convex combination of $f(x)$ and $f(y)$. That is to say for any $\lambda \in [0, 1]$ we have:
+% \begin{equation*}
+% f(\lambda x + (1 - \lambda) y) \leq \lambda f(x) + (1 - \lambda) f(y)
+% \end{equation*}
+%
+% For submodular $f$, its domain is discrete. Inequality~\ref{eqn:submodular-def-2} considers the discrete analogue of convex combination to be the union of two subsets $S, T$ and the upperbound of its image under $f$ to be given by the inclusion-exclusion principle.
 
 As an example, we note that the cost function for maximizing float is submodular.
 

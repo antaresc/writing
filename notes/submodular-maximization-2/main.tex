@@ -15,7 +15,7 @@ We conclude our discussion of maximizing submodular functions with the double gr
 
 Previously, we provided two examples for problems that are modeled by maximizing a submodular function under cardinality constraints: maximizing float among bank accounts, and maximizing social influence. However, many more problems are captured when cardinality constraints and guaranteed monotonicity are not provided.
 
-Recall the problem of maxcut. Given $G = (V, E)$ where each edge has weight $w_e$, our goal is to choose a cut such that the total weight of edges crossing the cut is maximized. More precisely, we wish to find $S \subseteq V$ such that the following function is maximized.
+Recall the problem of maxcut. Given $G = (V, E)$ where each edge has weight $w_e \geq 0$, our goal is to choose a cut such that the total weight of edges crossing the cut is maximized. More precisely, we wish to find $S \subseteq V$ such that the following function is maximized.
 \begin{equation}\label{eqn:maxcut}
 f(S) = \sum_{e \in E(S, V - S)} w_e
 \end{equation}
@@ -25,10 +25,47 @@ where $E(S, V - S) = \{ (u, v) \in E: u \in S \textup{ and } v \in V - S \}$. Th
 For a graph $G = (V, E)$ with edge weights $w_e$, the function $f$ defined in equation~\ref{eqn:maxcut} is submodular.
 \end{claim}
 \begin{proof}
+Recall that $f$ is submodular if and only if for all $S, T \subseteq V$ we have that $f(S \cup T) + f(S \cap T) \leq f(S) + f(T)$. Now, a sum of submodular functions is also submodular, thus to demonstrate that $f(S)$ is submodular, we will show that it is a sum of submodular functions. Define $f_e: 2^V \rightarrow \mathbb{R}_{\geq 0}$ for each edge $e \in E$ as
+\begin{equation*}
+f_e(S) = \begin{cases}
+w_e & \text{if } e \in E(S, V - S) \\
+0 & \text{otherwise}
+\end{cases}
+\end{equation*}
 
+Suppose $e = (u, v)$ and consider any $S, T \subseteq V$. To see that $f_e$ is submodular, we verify three cases.
+\vspace{-1em}
+\begin{enumerate}[1.]
+\item $S, T$ either contain none or both of $u, v$. In this case we have that
+\begin{equation*}
+f(S \cup T) + f(S \cap T)
+= 0
+= f(S) + f(T)
+\end{equation*}
+
+\item $S, T$ contain the same one of $u, v$. Without loss of generality, suppose $u \in S$ and $u \in T$. Observe that
+\begin{equation*}
+f(S \cup T) + f(S \cap T)
+= f(\{ u \}) + f(\{ u \})
+= 2 \cdot w_e
+= f(S) + f(T)
+\end{equation*}
+
+\item $S, T$ contain one of but different $u, v$. Without loss of generality, suppose $u \in S$ and $v \in T$. Observe that
+\begin{equation*}
+f(S \cup T) + f(S \cap T)
+= f(\{ u, v \}) + f( \varnothing )
+= 0
+\leq 2 \cdot w_e
+= f(\{ u \}) + f(\{ v \})
+= f(S) + f(T)
+\end{equation*}
+\end{enumerate}
+
+In all cases, $f_e$ satisfies submodularity. Finally, because $f(S) = \sum_{e \in E} f_e(S)$, we have that $f$ is submodular.
 \end{proof}
 
-However, the objective functions is not monotone. Consider the following example:\todo{insert example}
+However, the maxcut objective is certainly not monotone as the edge weights may be non-zero but $f(V) = 0$.
 
 \section{Maximizing Non-monotone Submodular Functions}
 
@@ -314,7 +351,7 @@ By claim~\ref{claim:do-something}, we need not consider the case $a_i < 0$ and $
 
 \section{Concluding Remarks}\label{sec:conclusion}
 
-The search for an optimal approximation algorithm for maximizing a non-monotone submodular function has a storied history. The study of this problem first began in the 1960s. A number of algorithms discovered during this period either focused on special cases, or provided outputs without provable guarantees\todo{Cite some things}. It wasn't until 2007, when Feige, Mirrokni and Vondr\'{a}k first provided a rigorous study of the problem~\cite{FMV07}. In their paper, they prove the following hardness result:
+The search for an optimal approximation algorithm for maximizing a non-monotone submodular function has a storied history. The study of this problem first began in the 1960s. A number of algorithms discovered during this period either focused on special cases, or provided outputs without provable guarantees~\cite{GST99, Kha68, GG05}. It wasn't until 2007, when Feige, Mirrokni and Vondr\'{a}k first provided a rigorous study of the problem~\cite{FMV07}. In their paper, they prove the following hardness result:
 \begin{theorem}
 For any $\epsilon > 0$, there does not exist $(\frac{1}{2} + \epsilon)$-approximation algorithm for maximizing a non-monotone submodular function using polynomial number of queries to an oracle access.
 \end{theorem}
@@ -337,8 +374,17 @@ U. Feige, V. Mirrokni \& J. Vondr\'{a}k. ``Maximizing non-monotone submodular fu
 \bibitem{FNS11}
 M. Feldman, J. Naor, and R. Schwartz. ``Nonmonotone submodular maximization via a structural continuous greedy algorithm.'' In \emph{ICALP} (2011), 342–353.
 
+\bibitem{GG05}
+Goldengorin, B., \& Ghosh, D. (2005). ``A multilevel search algorithm for the maximization of submodular functions applied to the quadratic cost partition problem.'' In \emph{Journal of Global Optimization}, 32(1), 65-82.
+
+\bibitem{GST99}
+Goldengorin, B., Sierksma, G., Tijssen, G. A., \& Tso, M. (1999). ``The data-correcting algorithm for the minimization of supermodular functions.'' In \emph{Management Science}, 45(11), 1539-1551.
+
 \bibitem{GV11}
 S. O. Gharan \& J. Vondr\'{a}k. ``Submodular maximization by simulated annealing.'' In \emph{SODA} (2011), 1098–1117
+
+\bibitem{Kha68}
+Khachaturov, V. R. (1968). ``Some problems of the consecutive calculation method and its applications to location problems'' (Doctoral dissertation, Ph. D. thesis, Central Economics \& Mathematics Institute, Russian Academy of Sciences, Moscow, 1968 (in Russian)).
 \end{thebibliography}
 
 \end{document}

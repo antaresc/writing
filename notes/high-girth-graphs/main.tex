@@ -1,0 +1,53 @@
+\documentclass[9pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{../../lib/theory-scribe}
+\usepackage{mathpazo}
+
+\begin{document}
+
+\lecture{Ball-Growing and Graphs with High Girth}{Antares Chen}{12/24/2019}{Fall 2019}
+
+In this note, we use ball-growing to bound the number of edges in a high-girth graph.
+
+\section{Introduction}
+
+Ball-growing is a nice technique for decomposing graphs into clusters that benefit from certain ``boundedness'' properties. For example, ball-growing is commonly used to construct a \emph{low-diameter decomposition} of a graph. These decompositions break the graph into clusters such that the number of boundary edges in
+
+
+It can be used to construct \emph{low-diameter decompositions} of a graph.  a decomposition of a graph into clusters where the size of the boundary of each cluster is bounded by the
+
+
+% A little introduction to ball growing
+
+Suppose we are given a graph $G = (V, E)$. The \emph{girth} of $G$ is defined as the length of the shortest cycle in $G$. For example, a triangle-free graph will have girth $g \geq 4$, while an acyclic graph can be considered to have girth $g = \infty$.
+
+
+\section{Bounding the Number of Edges in a High-Girth Graph}
+
+\begin{claim}
+Given any graph $G = (V, E)$ with girth $g$, let $n = \lvert V \rvert$. It holds that
+\begin{equation*}
+\lvert E \rvert \leq n^{1 + O(1/g)}
+\end{equation*}
+\end{claim}
+\begin{proof}
+Construct clusters $S_1, \ldots, S_k$ via the following ball-growing procedure.
+\vspace{-1em}
+\begin{enumerate}[1.]
+\item Pick an arbitrary $v_i$ and begin growing a ball $\mathcal{B}(v_i, r)$ centered at $v_i$.
+
+\item Increment $r = r + 1$ until either $\lvert \mathcal{B}_{r+1}(v_i) \rvert \leq n^{3/g} \cdot \lvert \mathcal{B}_{r}(v_i) \rvert$ or the ball contains all remaining vertices in the graph.
+
+\item Set $S_i = \mathcal{B}_r(v_i)$ and remove $S_i$ and all adjacent edges from the $G$.
+
+\item Repeat until $G$ has no remaining vertices.
+\end{enumerate}
+\end{proof}
+
+First observe that
+
+
+
+
+\end{document}

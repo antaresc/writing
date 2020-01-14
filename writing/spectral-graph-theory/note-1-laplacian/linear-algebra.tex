@@ -1,0 +1,75 @@
+% -------------
+% EDITING NOTES
+% -------------
+% Link to some texts where folks can find proofs of linear algebra facts like
+% - https://people.eecs.berkeley.edu/~luca/books/expanders-2016.pdf
+% - Friedburg linear algebra
+
+\section{Linear Algebra Review}
+
+Let's begin with a very brief review of linear algebra tools that will be important throughout our study of spectral graph theory. Most proofs will be omitted, and can be found in an introductory Linear Algebra textbook. First, our study of spectral graph theory will largely concern \emph{real symmetric matrices} i.e matrices $A$ where $A = A^\top$. Recall that $\lambda$ is an \emph{eigenvalue} of $A$ with \emph{eigenvector} $v \in \mathbb{R}^n$ provided 
+\begin{equation*}
+Av = \lambda v
+\end{equation*}
+
+A nice property that holds for real symmetric matrices is that its eigenvalues are always real, and that it admits a spectral decomposition. This is summarized by the what is often called the \emph{spectral theorem}.
+
+\begin{theorem}[Spectral Theorem]
+Given $A \in \mathcal{S}^{n \times n}$, then the following are true.
+\vspace{-1em}
+\begin{enumerate}[1.]
+  \item $A$ has $n$ (not necessarily distinct) real eigenvalues
+  \begin{equation*}
+    \lambda_1 \leq \lambda_2 \leq \ldots \leq \lambda_n
+  \end{equation*}
+
+  \item There exist $n$ orthonormal vectors $\{ v_1, \ldots, v_n \} \subseteq \mathbb{R}^n$ such that $v_i$ is an eigenvector of $A$ corresponding to $\lambda_i$.
+  
+  \item $A$ can be decomposed as 
+  \begin{equation*}
+    A = \sum_{i=1}^n \lambda_i v_i v_i^\top 
+  \end{equation*}
+\end{enumerate}
+\end{theorem}
+
+We will usually consider a more restricted class of matrices known as positive semidefinite matrices. We say $A \in \mathcal{S}^{n \times n}$ is \emph{positive semidefinite} (PSD) if all eigenvalues of $A$ are non-negative. An equivalent definition that will be quite useful to know is given by the following.
+\begin{theorem}\label{thm:psd-matrices}
+Given $A \in \mathcal{S}^{n \times n}$, the following are equivalent
+\vspace{-1em}
+\begin{enumerate}
+\item $A$ is positive semidefinite
+
+\item If $\lambda_1 \leq \ldots \leq \lambda_n$ are eigenvalues of $A$ then $\lambda_1 \geq 0$
+
+\item For any $x \in \mathbb{R}^n$, the quadratic form admits $x^\top Ax \geq 0$ 
+\end{enumerate}
+\end{theorem}
+
+The equivalence between items (2) and (3) are given by the variational characterization of eigenvalues. One may recall that the eigenvalues of a matrix form the roots of its characteristic polynomial. More specifically, we define $A$'s characteristic polynomial $p_A(t)$ as
+\begin{equation*}
+p_A(t) = \det (tI - A)
+\end{equation*}
+
+and if $\lambda$ is an eigenvalue of $A$, then $p_A(\lambda) = 0$. This algebraic characterization can be quite rigid in certain settings. If $A$ is real symmetric, then $A$'s spectrum enjoys a description that is more amenable to convex optimization settings. The \emph{variational characterization of eigenvalues} (also known as the Courant-Fisher definition) states the following
+
+\begin{theorem}[Variational Characterization of Eigenvalues]
+Let $A \in \mathcal{S}^{n \times n}$ with eigenvalues $\lambda_1 \leq \lambda_2 \leq \ldots \leq \lambda_n$ with orthonormal eigenvectors $v_1, \ldots, v_n$. Then
+\begin{equation*}
+\lambda_k 
+= \min_{x \in V_{k-1}: x \neq 0} \frac{x^\top Ax}{x^\top x}
+= \max_{x \in V^{k+1}: x \neq 0} \frac{x^\top Ax}{x^\top x}
+\end{equation*}
+
+where $V_k$ and $V^k$ are vector spaces orthogonal to $\textup{span} \{ v_1, \ldots, v_k \}$ and $\textup{span} \{ v_k, \ldots, v_n \}$ respectively.
+\end{theorem}
+
+Note a few special cases
+\begin{equation*}
+\lambda_1 = \min_{x \in \mathbb{R}^n : x \neq 0} \frac{x^\top Ax}{x^\top x}
+\qquad\qquad
+\lambda_2 = \min_{x \in \mathbb{R}^n : x \neq 0, x \perp v_1} \frac{x^\top Ax}{x^\top x}
+\qquad\qquad
+\lambda_n = \max_{x \in \mathbb{R}^n : x \neq 0} \frac{x^\top Ax}{x^\top x}
+\end{equation*}
+
+where $\perp$ denotes orthogonal to. The equivalence between items (2) and (3) in theorem~\ref{thm:psd-matrices} is given by the special case for $\lambda_1$. The ratio $\frac{x^\top Ax}{x^\top x}$ is known as the \emph{Rayleigh quotient} of $A$.

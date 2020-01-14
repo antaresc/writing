@@ -1,3 +1,4 @@
+\usepackage[mmddyyyy]{datetime}
 \usepackage{graphics}
 \usepackage{graphicx}
 \usepackage{microtype}
@@ -54,8 +55,8 @@
 \newtheorem{example}[theorem]{Example}
 
 % The following macro is used to generate the header.
-% usage: \lecture{TITLE}{SCRIBE}{DATE}{SEASON}
-\newcommand{\lecture}[4]{
+% usage: \lecture{TITLE}{SCRIBE}{SEASON}
+\newcommand{\lecture}[3]{
    \pagestyle{myheadings}
    \thispagestyle{plain}
    \newpage
@@ -65,11 +66,11 @@
    \framebox{
       \vbox{\vspace{2mm}
       \hbox to 6.28in {{\bf Theory Notes
-                          \hfill #4}}
+                          \hfill #3}}
       \vspace{6mm}
       \hbox to 6.28in {{\Large \hfill #1  \hfill}}
       \vspace{5mm}
-      \hbox to 6.28in {{Scribe: #2 \hfill #3}}
+      \hbox to 6.28in {{Last updated: \today \hfill #2}}
       \vspace{2mm}}
    }
    \end{center}

@@ -1,0 +1,107 @@
+% -------------
+% EDITING NOTES
+% -------------
+% - Use karray or the labeled array package to annotate the matrix product b_e b_e^\top
+% - Include a picture of the mini-Laplacian
+
+\section{The Graph Laplacian}
+
+We are now ready to begin with spectral graph theory. Suppose we are given an undirected, unweighted graph $G = (V, E)$. We will need a way of representing $G$ as a matrix that captures combinatorial properties of $G$. If our goal is to think about problems related to partitioning, routing, and computing flows in a graph, then it is reasonable to want information regarding graph \emph{cuts}. More precisely, we want to capture the size of a cut $S \subseteq V$ in the sense that, for $E(S, V - S)$ the set of edges crossing $S$ 
+\begin{equation*}
+E(S, V - S) = \{ (i, j) : i \in S \text{ and } j \notin S \}
+\end{equation*} 
+
+the size $\lvert E(S, V - S) \rvert$ is encoded by the quadratic form of our matrix representation. This is interesting for an immediate reason. The problem of \emph{maxcut} asks to compute a cut $S$ maximizing $E(S, V - S)$. Maxcut is $\NP$-hard and so one might want a continuous relaxation of the problem to construct rounding algorithms. If the quadratic form of this hypothetical matrix encodes cut sizes, then maximizing the quadratic form would provide a continuous relaxation of maxcut. Additionally, we may hope that further interesting combinatorial properties related to cuts may arise when studying the spectrum of our hypothetical matrix.
+
+Towards constructing this matrix, we'll endow $G$ with an arbitrary orientation. This seems like a strange step, but ultimately the direction of an edge will not matter. Supposing that $G$ has $n$ vertices, we can then define the indicator vector $b_e \mathbb{R}^n$ for each edge $e \in E$ where coordinate $i \in V$ is given by 
+\begin{equation*}
+b_e(i) = \begin{cases}
+  +1 & \text{if } e \text{ is directed toward } i \\
+  -1 & \text{if } e \text{ is directed away from } i \\
+  0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+
+That is for each $e \in E$, $b_e$ is $+1$ at the head of $e$, $-1$ at the tail of $e$, and 0 everywhere else. Now for a fixed edge $e = (u, v)$, consider the matrix $b_e b_e^\top$. It will be 0 everywhere except for
+\begin{equation*}
+b_e b_e^\top 
+= \begin{pmatrix}
+\quad\cdots & -1 & \cdots & +1 & \cdots\quad 
+\end{pmatrix}
+\begin{pmatrix}
+\vdots \\ -1 \\ \vdots \\ +1 \\ \vdots
+\end{pmatrix}
+= \begin{pmatrix}
+  & \vdots & & \vdots & \\
+  \quad\cdots & +1 & \cdots & -1 & \cdots\quad \\
+  & \vdots & & \vdots & \\
+  \quad\cdots & -1 & \cdots & +1 & \cdots\quad \\
+  & \vdots & & \vdots &
+\end{pmatrix}
+\end{equation*}
+
+If we take the indicator vector for a cut $S \subseteq V$, i.e. $x_S$ such that $x_S(i) = 1$ if $i \in S$ and 0 otherwise, then notice what the quadratic form of $b_e b_e^\top$ with $x_S$ becomes.
+\begin{equation*}
+x_S^\top b_e b_e^\top x_S
+= \langle x_S, b_e \rangle^2
+= \begin{cases}
+  1 & \text{if } e \in E(S, V - S) \\
+  0 & \text{otherwise}
+\end{cases}
+\end{equation*}
+
+That is $x_S^\top b_e b_e^\top x_S$ indicates if $e$ is cut by $S$. Summing $b_e b_e^\top$ across $e \in E$, the quadratic form becomes
+\begin{equation*}
+x_S^\top \bigg( \sum_{e \in E} b_e b_e^\top \bigg) x_S 
+= \sum_{e \in E} \langle x_S, b_e \rangle^2
+= \sum_{e \in E} \mathbb{I} \{ e \in E(S, V - S) \}
+= \lvert E(S, V - S) \rvert
+\end{equation*}
+
+which is exactly what we want! The matrix $\sum_{e \in E} b_e b_e^\top$ is called the \emph{Graph Laplacian} of $G$.
+\begin{definition}[Graph Laplacian] Given a graph $G = (V, E)$, the Graph Laplacian $L_G$ is defined as
+\begin{equation*}
+L_G = \sum_{e \in E} b_e b_e^\top 
+\end{equation*}
+\end{definition}
+
+One way of thinking about this definition is that $L_G$ is a sum of ``mini'' Laplacians in the sense that $b_e b_e^\top$ is the Laplacian of a new graph $G[e]$ with the same vertices of $G$ but only the single edge $e$.
+\begin{equation*}
+L_{G[e]}
+= b_e b_e^\top
+= \begin{pmatrix}
+  & \vdots & & \vdots & \\
+  \quad\cdots & +1 & \cdots & -1 & \cdots\quad \\
+  & \vdots & & \vdots & \\
+  \quad\cdots & -1 & \cdots & +1 & \cdots\quad \\
+  & \vdots & & \vdots &
+\end{pmatrix}
+\end{equation*}
+
+This can be a convenient way of thinking about the Laplacian because if we decompose $G$ into an edge disjoint set of graphs $G_1, \ldots, G_k$, then the Laplacian decomposes in an additive manner
+\begin{equation*}
+L_G = L_{G_1} + L_{G_2} + \ldots + L_{G_k}
+\end{equation*} 
+
+Another thing to note is that the definition is unaffected by the orientation of $G$. We could have equivalently expressed $L_G$ as 
+\begin{equation*}
+L_G = D - A
+\end{equation*}
+
+where $D$ is the diagonal matrix with the $(i, i)$-th entry given by $[D]_{ii} = \deg(i)$ and $A$ is the adjacency matrix of $G$. Since $D$ and $A$ are both real symmetric matrices, this implies $L_G$ is real symmetric. But more than that, $L_G$ is positive semidefinite.
+\begin{claim}
+$L_G$ is a positive semidefinite matrix.
+\end{claim}
+\begin{proof}
+Consider any $x \in \mathbb{R}^n$. We can compute the quadratic form as follows
+\begin{equation*}
+x^\top L_G x 
+= \sum_{e \in E} \langle x_S, b_e \rangle^2 
+= \sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2 
+\end{equation*}
+
+A sum of squares is always non-zero hence $x^\top L_G x \geq 0$ for any vector $x$.
+\end{proof}
+
+
+

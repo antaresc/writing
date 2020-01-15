@@ -1,0 +1,87 @@
+\section{The Smallest Eigenvalues of $L_G$}
+
+We'll first lower bound the eigenvalues of the Laplacian. We know that the smallest eigenvalue minimizes the Rayleigh quotient over non-zero vectors. Since $L_G$ is PSD, we have $\frac{x^\top L_G x}{x^\top x} \geq 0$. Consequently, the minimum is achieved if we can exhibit a vector $x \neq 0$ where $x^\top L_G x = 0$. Let's write
+\begin{equation*}
+\frac{x^\top L_G x}{x^\top x}
+= \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2 }{\sum_{i \in V} x(i)^2}
+\end{equation*}
+
+This quantity is minimized if we can set the numerator to 0, that is assign $x(i) = x(j)$ for all $(i, j) \in E$. We can always assign $x_1 = t \mathbb{1}$ for some $t \in \mathbb{R}$ hence the all-ones vector is always an eigenvector of $L_G$ with eigenvalue 0. This demonstrates the following claim.
+
+\begin{claim}\label{claim:smallest-eigenvalue}
+Let $\lambda_1 \leq \ldots \leq \lambda_n$ be eigenvalues of $L_G$. Then $\lambda_1 = 0$ with eigenvector $v_1 = \mathbb{1}$ the all-ones vector.
+\end{claim}
+
+But, imagine if $G$ had two separate connected components. We could hypothetically assign two vectors, $x$ and $x'$, such that both are orthogonal, yet map to 0 under the Laplacian of the graph. We would then demonstrate that the Laplacian admits $\lambda_1 = \lambda_2 = 0$. This intuition is actually tight in the sense of the following statement.
+
+\begin{theorem}\label{thm:connectivity}
+$G$ is connected if and only if $\lambda_1 = 0$ and $\lambda_i > 0$ for all $i > 1$.
+\end{theorem}
+\begin{proof}
+First we demonstrate the forward direction: if $G$ is connected, then $L_G$ has eigenvalue 0 with multiplicity 1. Since we know that $L_G \mathbb{1} = 0$, we need to show that any eigenvector $x$ with eigenvalue 0 is in the span of $\mathbb{1}$. Suppose $x$ is an eigenvector with eigenvalue 0. Then $L_G x = 0$ implying
+\begin{equation*}
+0
+= x^\top L_G x
+= \sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2
+\end{equation*}
+
+The left expression is a sum of squares meaning each term must be simultaneously equal to 0. Consequently, $x(i) = x(j)$ for each $(i, j) \in E$ implying $x = t\mathbb{1}$ for a $t \in \mathbb{R}$ as required.
+
+In the opposite direction, we demonstrate the converse of the claim: if $G$ is disconnected, then $L_G$ must have eigenvalue 0 with multiplicity greater than 1. We need to show $L_G$ has at least two linearly independent eigenvectors with eigenvalue 0. Now, if $G$ is disconnected, then it has two disjoint connected components. Let's denote $G_1$ and $G_2$ as the induced subgraphs on those connected components. These two graphs are edge disjoint hence the Laplacian decomposes in an additive manner
+\begin{equation*}
+L_G = L_{G_1} + L_{G_2}
+\end{equation*}
+
+Without loss of generality, let's assume that $L_G$ forms the following block matrix
+\begin{equation*}
+\arraycolsep=8pt\def\arraystretch{1.5}
+L_G = \left[
+    \begin{array}{c;{2pt/2pt}c}
+      L_{G_1} & 0 \\ \hdashline[2pt/2pt]
+      0 & L_{G_2}
+    \end{array}
+  \right]
+\end{equation*}
+
+We can immediately see two ways to assign vectors $x_1$ and $x_2$ such that $L_G x_1 = 0$ and $L_G x_2 = 0$
+\begin{equation*}
+\arraycolsep=8pt\def\arraystretch{1.5}
+L_G x_1 = \left[
+  \begin{array}{c;{2pt/2pt}c}
+    L_{G_1} & 0 \\ \hdashline[2pt/2pt]
+    0 & L_{G_2}
+  \end{array}
+\right]
+\cdot
+\left[
+  \begin{array}{c}
+    1 \\ \hdashline[2pt/2pt]
+    0
+  \end{array}
+\right]
+\qquad\qquad
+L_G x_2 = \left[
+  \begin{array}{c;{2pt/2pt}c}
+    L_{G_1} & 0 \\ \hdashline[2pt/2pt]
+    0 & L_{G_2}
+  \end{array}
+\right]
+\cdot
+\left[
+  \begin{array}{c}
+    0 \\ \hdashline[2pt/2pt]
+    1
+  \end{array}
+\right]
+\end{equation*}
+
+Since $\langle x_1, x_2 \rangle = 0$, they are orthogonal, hence linearly independent, as required.
+\end{proof}
+
+The proof of theorem~\ref{thm:connectivity} can be extended in a straightforward manner to demonstrate the stronger statement
+
+\begin{corollary}
+$G$ has $k$ disjoint connected components if and only if $\lambda_k = 0$ and $\lambda_i > 0$ for all $i > k$.
+\end{corollary}
+
+This demonstrates to us that the spectrum of the Laplacian and conveys information about the combinatorial structure of a graph. We can verify that a graph is connected by checking if $\lambda_2 = 0$, and more generally, if $G$ consists of $k$ disjoint clusters by determining if $\lambda_{k+1} = 0$. Let's now consider the largest eigenvalue and see if it relates to certain extremal properties of graphs.

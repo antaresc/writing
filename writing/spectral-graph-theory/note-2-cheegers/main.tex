@@ -1,8 +1,10 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{bm}
-\usepackage{../../../lib/theory-scribe}
-\usepackage{mathpazo}
+
+\usepackage{../../../lib/sgt-scribe}
+\usepackage{../../../lib/kbordermatrix}
+
+\renewcommand{\kbldelim}{[}
+\renewcommand{\kbrdelim}{]}
 
 \usepackage[T1]{fontenc}
 
@@ -10,7 +12,7 @@
 
 \begin{document}
 
-\lecture{Spectral Graph Theory: Connectivity and Cheeger's Inequality}{Antares Chen}{12/29/2019}{Fall 2019}
+\lecture{Graph Connectivity and Cheeger's Inequality}{Antares Chen}{12/29/2019}{Winter 2020}
 
 
 % --------------------------------------------------------------------
@@ -18,21 +20,54 @@
 % --------------------------------------------------------------------
 \input{introduction.tex}
 
+
+% --------------------------------------------------------------------
+% THE SECOND SMALLEST EIGENVALUE
+% --------------------------------------------------------------------
+\input{second-eigenvalue.tex}
+
+
+% --------------------------------------------------------------------
+% GRAPH CONDUCTANCE
+% --------------------------------------------------------------------
+\input{conductance.tex}
+
+
+% --------------------------------------------------------------------
+% CHEEGER'S INEQUALITY
+% --------------------------------------------------------------------
+\input{cheeger.tex}
+
+
+% --------------------------------------------------------------------
+% CONCLUSION
+% --------------------------------------------------------------------
+\input{conclusion.tex}
+
 % Some thoughts on how to write this
-% - start with two examples, the path and the clique 
+% - start with two examples, the path and the clique
 % - make the kinda spurious link to connectivity
-% - introduce conductance 
+% - introduce conductance and say how even this is interesting in its own right. One would think
+%   that highly connected graphs have to be dense, but now we can ask, is there a highly connected
+%   graph that is sparse? (indeed that is what expanders are).
+% - Maybe cite the Jellyfish paper / and the image segmentation paper to show that it's quite useful
+%   actually.
 % - introduce the normalized laplacian
-% - introduce cheeger's inequality 
-% - prove cheeger's 
+% - introduce cheeger's inequality: say something about why this makes spectral graph theory very useful:
+%   in an algorithmic sense like it's not enough just to say that the spectrum captures
+%   extremal properties, because we can always efficiently verify that by running a BFS. What makes
+%   this powerful is that it really allows us to measure combinatorial properties like connectivity
+%   in a continuous manner.
+% - prove cheeger's
 % - say something about the tightness of the inequality and the i n e v i t a b i l i t y of the proof
-% - hint towards higher order cheegers by stating connectivity as the closeness to having two disjoint connected components and the lambda_k result 
+% - hint towards higher order cheegers by stating connectivity as the closeness to having two
+%   disjoint connected components and the lambda_k result
 
-
-% \bibliographystyle{plain}
-% \begin{thebibliography}{99}
-% \bibitem{ARV09}
-% Arora, S., Rao, S., \& Vazirani, U. (2009). ``Expander flows, geometric embeddings and graph partitioning.'' In \emph{Journal of the ACM (JACM)}, 56(2), 5.
-% \end{thebibliography}
+\vfill
+\begin{center}
+  \begin{footnotesize}
+    Last updated: \today
+  \end{footnotesize}
+\end{center}
 
 \end{document}

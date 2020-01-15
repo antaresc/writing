@@ -1,3 +1,19 @@
 \section{Conclusion}
 
-In this note, we introduced the graph Laplacian and saw some examples that connected the spectrum of the Laplacian to extremal graph properties like connectivity and bipartiteness. These connections were facilitated by the variational characterization of eigenvalues, and one thing that was mentioned was how this way of describing eigenvalues easily lends itself to optimization settings.  
+In this note, we introduced the graph Laplacian as a matrix that was reverse engineered to encode cut sizes in its quadratic form. We did so for two reasons: (1) maximizing the quadratic form would provide a relaxation of the maxcut problem, and (2) doing so would hopefully allow the spectrum of the Laplacian, via the variational characterization of eigenvalues, to capture some combinatorial structure of the graph. Indeed, we verified that the spectrum of the Laplacian held a nice connection to various extremal graph properties.
+\vspace{-1em}
+\begin{enumerate}[-]
+  \item We saw that $\lambda_2 = 0$ if the graph is disconnected.
+
+  \item We saw that $\lambda_k = 0$ if the graph has $k$ disjoint connected components.
+
+  \item We saw that $\lambda_n = 2d$ if a $d$-regular graph is bipartite.
+\end{enumerate}
+
+However, we have not fully discussed where relaxations come into play. Revisiting how we wrote the Rayleigh quotient for $\lambda_n$
+\begin{equation*}
+\frac{x^\top L_G x}{x^\top x}
+= 2d - \frac{\sum_{(i, j) \in E} \big( x(i) + x(j) \big)^2 }{\sum_{i \in V} x(i)^2}
+\end{equation*}
+
+If $\lambda_n$ is large then $x(j)$ should be close to $-x(i)$ for each $(i, j) \in E$. This means that $G$ should have a large maxcut, or rather, be ``close'' to being bipartite. What this suggests is our next big idea: the eigenvalues of the Laplacian provide a robust way of continuously measuring certain combinatorial properties of a graph!

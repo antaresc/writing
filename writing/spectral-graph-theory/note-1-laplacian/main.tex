@@ -1,8 +1,10 @@
 \documentclass{article}
-\usepackage[utf8]{inputenc}
-\usepackage{bm}
-\usepackage{../../../lib/theory-scribe}
-\usepackage{mathpazo}
+
+\usepackage{../../../lib/sgt-scribe}
+\usepackage{../../../lib/kbordermatrix}
+
+\renewcommand{\kbldelim}{[}
+\renewcommand{\kbrdelim}{]}
 
 \usepackage[T1]{fontenc}
 
@@ -10,7 +12,7 @@
 
 \begin{document}
 
-\lecture{Spectral Graph Theory: the Laplacian}{Antares Chen}{Winter 2020}
+\lecture{The Laplacian}{Antares Chen}{1/7/2020}{Winter 2020}
 
 
 % --------------------------------------------------------------------
@@ -20,27 +22,27 @@
 
 
 % --------------------------------------------------------------------
-% LINEAR ALGEBRA REVIEW
+% LINEAR ALGEBRA
 % --------------------------------------------------------------------
 \input{linear-algebra.tex}
 
 
 % --------------------------------------------------------------------
-% LAPLACIAN 
+% LAPLACIAN
 % --------------------------------------------------------------------
 \input{laplacian.tex}
 
 
 % --------------------------------------------------------------------
-% BASIC SPECTRAL PROPERTIES
+% SMALLEST EIGENVALUE
 % --------------------------------------------------------------------
-\input{laplacian-spectral.tex}
+\input{eigenvalues-small.tex}
 
 
 % --------------------------------------------------------------------
-% SOME EXTREMAL PROPERTIES
+% LARGEST EIGENVALUE
 % --------------------------------------------------------------------
-\input{laplacian-extremal.tex}
+\input{eigenvalues-large.tex}
 
 
 % --------------------------------------------------------------------
@@ -48,5 +50,11 @@
 % --------------------------------------------------------------------
 \input{conclusion.tex}
 
+\vfill
+\begin{center}
+  \begin{footnotesize}
+    Last updated: \today
+  \end{footnotesize}
+\end{center}
 
 \end{document}

@@ -1,0 +1,314 @@
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{color}
+\usepackage{enumerate}
+\usepackage{url,hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+
+\usepackage{thmtools}
+\usepackage{thm-restate}
+
+\newcommand{\etal}{{\em et al.}\ }
+\newcommand{\assign}{\leftarrow}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\opt}{\textup{\textsc{opt}}}
+\newcommand{\alg}{\textup{\textsc{alg}}}
+\newcommand{\pr}{\textup{Pr}}
+\newcommand{\dd}{\mathrm{d}}
+
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\trace}{\textup{tr}}
+\DeclareMathOperator*{\rank}{\textup{rank}}
+\DeclareMathOperator{\cut}{\mathrm{cut}}
+
+\renewcommand{\thepage}{\arabic{page}}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{fact}[theorem]{Fact}
+
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+
+\usepackage[T1]{fontenc}
+
+\DeclareMathOperator*{\Vol}{Vol}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+\DeclareMathOperator*{\R}{\mathbb{R}}
+\DeclareMathOperator*{\Var}{Var}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cG}{\mathcal{G}}
+
+\newcommand{\gReg}[2]{\cG_{#1, #2}^{\textup{reg}}}
+\newcommand{\gErd}[2]{\cG_{#1, #2}}
+
+\def\bone{{\bf 1}}
+
+\allowdisplaybreaks
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{1em}
+
+\title{Theoretical Computer Science Bibliography}
+\author{Antares Chen}
+
+\begin{document}
+
+\maketitle
+
+
+% ------------------------------------------------
+% REFERENCES BY TOPIC
+% ------------------------------------------------
+
+\section{References By Topic}
+
+\begin{enumerate}[--]
+
+\item \emph{Brownian motion, stochastic calculus, and applications}
+\begin{description}
+\item[\cite{Oks13}] {{\O}}ksendal's book on It\^{o} calculus, stochastic differential equations, and various applications. Motivation for the definition of an It\^{o} Integral is pretty good.
+
+\item[\cite{VH07}] Van Handel's lecture notes on stochastic differential equations. The first two chapters are a good recap of basic probability theory and martingales.
+
+\item[\cite{Eld20}] Ronen Eldan's notes on stochastic calculus and applications to the KLS conjecture.
+
+\item[\cite{EN19}] Reverse-engineers an It\^{o} process to capture random hyperplane rounding for the Goemans-Williamson maxcut relaxation.
+
+\item[\cite{AZBG+20}] Simpler algorithm for solving maxcut (and other CSPs) using sticky Brownian motion (no slowdown compared to~\cite{EN19}).
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Convex optimization}
+\begin{description}
+\item[\cite{BNO03}] This reference was suggested by Lorenzo. Have not checked this but should.
+
+\item[\cite{Bor10}] This reference is being used by Lorenzo for his reading group. Has content on value function formalism, Fenchel conjugacy, and other topics.
+
+\item[\cite{Nes13}] Nesterov's textbook on convex optimization. This is like the definitive source.
+
+\item[\cite{Nes18}] I'm not sure what the difference between what this and the one above is.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Differential geometry}
+\begin{description}
+\item[\cite{Mil77}] This was the booked used in Math142.
+
+\item[\cite{Tay11}] The introduction section has a good recap of multivariable calculus. The implicit function theorem gets used everywhere in differential geometry.
+
+\item[\cite{Del16}] Harrison recommended this set of notes to learn differential forms. The PDF is in ``academic turtle shell''.
+
+\item[\cite{Lee10}] The book everyone reads to learn about topological manifolds.
+
+\item[\cite{Bha09}] Section 6 has discusses positive definite matrices as a manifold. Some further work is done to express the geodesics on this space.
+
+\item[\cite{Lov19}] Lorenzo had linked this reference when discussing manifolds.
+
+\item[\cite{RSS12}] This book develops the terminology of differential geometry and manifolds using Physics based intuition. Seems to discuss everything including differential forms, manifolds, Lie groups, symplectic geometry, and Hamiltonian mechanics.
+
+\item[\cite{Vis18}] The introduction of this article covers the basics of differential manifolds. Later goes into applications of geodesic convexity and alternating minimization (operator scaling).
+
+\item[\cite{BL16}] A book which introduces differential geometry of surfaces embedded in Euclidean spaces.
+\end{description}
+
+% ------------------------------------------------
+
+% TODO: Collect some references on things like
+%       multiplicative weights, follow the
+%       regularized leader, gradient descent.
+% \item \emph{First-order methods}
+% \begin{description}
+%
+% \end{description}
+
+% ------------------------------------------------
+
+\item \emph{Graph sparsification}
+% \begin{description}
+%
+% \end{description}
+
+% ------------------------------------------------
+
+\item \emph{Information geometry}
+\begin{description}
+\item[\cite{Nie18}] Nielsen's introduction to information geometry. Not as extensive as Amari's, also has a nice, quick introduction on differential geometry.
+
+\item[\cite{Ama16}] Amari's book on information geometry. More in depth and formal with relevant objects and results.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Large deviation theory}
+\begin{description}
+\item[\cite{DZ11}] Sekhar recommended me this book to study large deviation theory
+
+\item[\cite{Var84}] It seems like this is the standard book for large deviation theory?
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Local algorithms and statistical physics}
+\begin{description}
+\item[\cite{Zad19}] Ilias Zadik's thesis. Look here for comprehensive collection of results proving overlap gap properties for various high-dimensional statistics problems.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Local graph partitioning}
+\begin{description}
+\item[\cite{LR99}] The Leighton--Rao $O(\log n)$-approximation algorithm for sparsest cut using $\ell_1$-flow embeddings.
+
+\item[\cite{ARV09}] The Arora--Rao--Vazirani $O(\sqrt{\log n})$-approximation for sparsest cut using $\ell_2$-flow embeddings and the expander flows framework.
+
+\item[\cite{KRV09}] Fast sparsest cut using the cut-matching games framework to replaced having to do a multicommodity flow computation in the embedding to a single commodity flow computation.
+
+\item[\cite{Ore11}] Lorenzo's dissertation with explanation of matrix multiplicative weights, cut matching games, and algorithms for vertex partitioning.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Random graphs and statistical physics}
+% \begin{description}
+%
+% \end{description}
+
+% ------------------------------------------------
+
+\item \emph{Semidefinite programming rounding, duality and complementarity}
+% \begin{description}
+%
+% \end{description}
+
+% ------------------------------------------------
+
+\item \emph{Spectral graph theory}
+\begin{description}
+\item[\cite{RS10}] This paper introduces the Small Set Expansion Hypothesis.
+
+\item[\cite{LRTV12}] The higher-order Cheeger inequality due to Louis, Raghavendra, Tetali, and Vempala. Theirs determines that $\phi(S_i) \leq \sqrt{\lambda_r \log r}$ (for small set $S_i$'s that partition $V$) through an argument I haven't yet parsed.
+
+\item[\cite{LGT14}] The higher-order Cheeger inequality due to Lee, Oveis-Gharan, and Trevisan. They have a slightly improved constant, but the argument follows naturally from analyzing the heuristic of performing lower-dimensional spectral embeddings.
+
+\item[\cite{GL13}] Improved ARV rounding for graphs with low threshold-rank.
+
+\item[\cite{LR99}] Certifying expansion of a graph using Leighton--Rao rounding of the sparsest cut LP.
+
+\item[\cite{ARV09}] Certifying expansion of a graph using ARV rounding of the sparsest cut SDP.
+
+\item[\cite{AGS13}] Expander flows except applied to small sets. Basically the natural marriage of higher-order Cheeger's and expander flows.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Symplectic geometry}
+\begin{description}
+\item[\cite{DS08}] Seems to be the definitive reference for symplectic geometry.
+
+\item[\cite{RSS12}] This book develops discusses symplectic geometry and Hamiltonian mechanics together. Worth checking out.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Random matrix theory}
+\begin{description}
+\item[\cite{Tro15}] Introduction to non-asymptotic matrix concentration bounds (i.e. Matrix Chernoff, etc.).
+\item[\cite{BGK16}] Lecture notes on local semi-circle laws for Wigner matrices using the resolvent formalism.
+\item[\cite{EY17}] Universality for random matrices using Dyson--Brownian motion as a method of interpolation.
+\end{description}
+
+% ------------------------------------------------
+
+\item \emph{Variational calculus}
+% \begin{description}
+%
+% \end{description}
+
+% ------------------------------------------------
+
+\item \emph{Vertex separators}
+% \begin{description}
+%
+% \end{description}
+
+\end{enumerate}
+
+
+% ------------------------------------------------
+% REFERENCES BY PAPER
+% ------------------------------------------------
+
+\section{References By Paper}
+
+\begin{description}
+\item[2020] \emph{Cut sparsification of the clique beyond the ramanujan bound}
+\begin{enumerate}[--]
+\item \cite{CR02}, \cite{DMS17}, \cite{FGL12}, \cite{Gue03}, \cite{JS17}, \cite{Neu13}, \cite{Pan14}, \cite{Par80}, \cite{Tal06}, \cite{Sen18}, \cite{SS11}, \cite{ST11}, \cite{ACK+16}, \cite{AZLO15}, \cite{BK96}, \cite{Bor19}, \cite{BSS09}, \cite{LS17}, \cite{Pol45}, \cite{ST18}, \cite{Eva10}
+\end{enumerate}
+
+\item[\cite{CHS16}] \emph{Partial resampling to approximate covering integer programs}
+\begin{enumerate}[--]
+\item \cite{BKNS12}, \cite{CT91}, \cite{CFLP99}, \cite{CQ18}, \cite{CQ19}, \cite{CC08}, \cite{Chv97}, \cite{Dob82}, \cite{EL73}, \cite{Fei98}, \cite{FW82}, \cite{Har16}, \cite{HS19}, \cite{Har15}, \cite{Joh73}, \cite{Kar72}, \cite{KY05}, \cite{LLRS01}, \cite{Lov75}, \cite{MT10}, \cite{PS97}, \cite{RT87}, \cite{Sla97}, \cite{Sri06}, \cite{Tre01}, \cite{Vaz13}, \cite{WRM15}, \cite{You14}
+\end{enumerate}
+\end{description}
+
+
+% ------------------------------------------------
+% DISSERTATIONS
+% ------------------------------------------------
+
+\section{Dissertations}
+
+\begin{description}
+\item[\cite{Mal19}] Enrico's dissertation with calculations of Parisi's replica symmetric and replica breaking solutions to the Sherrington--Kirkpatrick model.
+
+\item[\cite{Ore11}] Lorenzo's dissertation with explanation of matrix multiplicative weights, cut matching games, and algorithms for vertex partitioning.
+
+\item[\cite{Zad19}] Ilias Zadik's thesis on proving overlap gap properties to justify lower bounds for local and MCMC-based algorithms.
+\end{description}
+
+
+% ------------------------------------------------
+% UNCATEGORIZED REFERENCES
+% ------------------------------------------------
+
+\section{Uncategorized References}
+
+% \begin{enumerate}[--]
+% \item
+% \end{enumerate}
+
+
+% ------------------------------------------------
+% BIBLIOGRAPHY
+% ------------------------------------------------
+
+\newpage
+\bibliographystyle{alpha}
+\bibliography{theory.bib}
+
+\end{document}

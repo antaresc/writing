@@ -46,10 +46,15 @@
 \setlength{\parindent}{0 in}
 \setlength{\parskip}{0.2 in}
 
+\newcounter{lecnum}
 \renewcommand{\thepage}{\arabic{page}}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
 
 % Theorem environments
-\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[lecnum]
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{claim}[theorem]{Claim}
@@ -60,18 +65,19 @@
 \newtheorem{example}[theorem]{Example}
 
 % The following macro is used to generate the header.
-% usage: \lecture{TITLE}{SCRIBE}{DATE}{SEASON}
+% usage: \lecture{TITLE}{SCRIBE}{DATE}{DOC NUMBER}
 \newcommand{\lecture}[4]{
   \pagestyle{myheadings}
   \thispagestyle{plain}
   \newpage
+  \setcounter{lecnum}{#4}
   \setcounter{page}{1}
   \noindent
   \begin{center}
     \framebox{
       \vbox{\vspace{2mm}
       \hbox to 6.28in {{\bf Spectral Graph Theory
-                          \hfill #4}}
+                          \hfill Note #4}}
       \vspace{6mm}
       \hbox to 6.28in {{\Large \hfill #1  \hfill }}
       \vspace{5mm}

@@ -1,1 +1,73 @@
 \section{The Second Smallest Eigenvalue}
+
+Towards relating graph connectivity to the second eigenvalue of the Laplacian, we'll want to look more closely at the variational characterization of $\lambda_2$. Because $\mathbb{1}$ is always a eigenvector of $L_G$ corresponding to the smallest eigenvalue, we know that the second eigenvalue must minimize the Rayleigh quotient over non-zero vectors orthogonal to $\mathbb{1}$, that is
+\begin{equation}\label{eqn:second-eig}
+  \lambda_2
+  = \min_{x : x \neq 0, x \perp \mathbb{1}} \frac{x^\top L_G x}{x^\top x}
+  = \min_{x : x \neq 0, x \perp \mathbb{1}} \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\sum_{i \in V} x(i)^2}
+\end{equation}
+
+Now, let's write this in a more interpretable way by using the required condition $x \perp \mathbb{1}$. Consider the quantity $\sum_{i, j \in V} \big( x(i) - x(j) \big)^2$ i.e. the sum of differences over all pairs of vertices. We can reduce this to
+\begin{align*}
+\sum_{i, j \in V} \big( x(i) - x(j) \big)^2
+&= \sum_{i, j \in V} \big( x(i)^2 - 2 \cdot x(i) x(j) + x(j)^2 \big) \\
+&= 2n \sum_{i \in V} x(i)^2 - 2 \sum_{i, j \in V} x(i) x(j) \\
+&= 2n \sum_{i \in V} x(i)^2 - 2 \bigg( \sum_{i \in V} x(i) \bigg)^2
+\end{align*}
+
+Because $x \perp \mathbb{1}$, we have $\sum_{i \in V} x(i) = 0$ implying
+\begin{equation}\label{eqn:trick}
+\sum_{i \in V} x(i)^2 = \frac{1}{2n} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2
+\end{equation}
+
+Plugging equation~\ref{eqn:trick} into the denominator of equation~\ref{eqn:second-eig} we get
+\begin{equation*}
+\min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\sum_{i \in V} x(i)^2}
+= \min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\frac{1}{2n} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2}
+\end{equation*}
+
+This may not seem like much, but we can use a fancy choice of 1 to rewrite this into an expression that provides an interesting interpretation.
+\begin{align*}
+\min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\frac{1}{2n} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2}
+&= \min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\frac{1}{2n} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2} \cdot \frac{\frac{2d}{dn}}{\frac{2}{n}} \\
+&= d \cdot \Bigg( \min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\frac{1}{dn / 2} \cdot \sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\frac{1}{n^2} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2} \Bigg)
+\end{align*}
+
+Disregarding a factor of $d$, what this quantity says is the following. Think of the vector $x \in \mathbb{R}$ as an embedding of the vertices $i \in V$ onto the real line $\mathbb{R}$ using the map
+\begin{equation*}
+i \mapsto x(i)
+\end{equation*}
+
+The sum only concerns squared differences, or squared distances between vertices. In the numerator, we have the sum over all squared distances divided by $\frac{dn}{2}$ or the number of edges in $G$. This means that the numerator expresses the \emph{expected distance squared over uniformly random choices of edges from $G$}. The denominator then expresses the expected distances squared over \emph{random pairs of vertices from $G$}. If we denote $\expect_{(i, j) \sim E}$ and $\expect_{(i, j) \sim V \times V}$ as the expectation taken over random choices of edges and unordered pairs of vertices respectively, we have
+\begin{equation}\label{eqn:expectation}
+d \cdot \Bigg( \min_{x : x \neq 0, x \perp \mathbb{1}}
+  \frac{\frac{1}{dn / 2} \cdot \sum_{(i, j) \in E} \big( x(i) - x(j) \big)^2}{\frac{1}{n^2} \cdot \sum_{i, j \in V} \big( x(i) - x(j) \big)^2} \Bigg)
+= d \cdot \Bigg( \min_{x : x \neq 0, x \perp \mathbb{1}} \frac{\expect_{(i, j) \sim E} \big( x(i) - x(j) \big)^2}{\expect_{(i, j) \sim V \times V} \big( x(i) - x(j) \big)^2} \Bigg)
+\end{equation}
+
+Now to upper bound $\lambda_2 \leq \alpha$, we just need to provide an embedding $x$ that witnesses the Rayleigh quotient evaluating to $\alpha$. Choosing an embedding that minimizes this ratio thus amounts to finding an embedding of the graph on the line where the squared distance along edges is much smaller than the squared distance between a random pair of vertices. We'll now see this in action with the following example.
+
+% --------------------------------------------------------------------
+% CYCLE EXAMPLE
+% --------------------------------------------------------------------
+
+\subsection{The Cycle}
+
+Let's upper bound $\lambda_2$ when $G$ is the $n$ vertex cycle. Our hope will be to embed the cycle onto the line such that pairs of vertices with edges between them are close to each other, while most other vertex pairs are far apart. One way to do this is as follows.
+
+% DESCRIBE THE EMBEDDING
+
+% MAKE SOME HAND WAVEY COMMENT ABOUT WHY THE NUMERATOR IS O(1) WHILE THE DENOMINATOR IS O(n^2)
+
+% DO THE ACTUAL CALCULATION
+
+% --------------------------------------------------------------------
+% COMPLETE GRAPH EXAMPLE
+% --------------------------------------------------------------------
+
+\subsection{The Complete Graph}

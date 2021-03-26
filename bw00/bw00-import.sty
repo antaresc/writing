@@ -1,0 +1,134 @@
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage}
+\usepackage{color}
+\usepackage{microtype}
+\usepackage{todonotes}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{float}
+\usepackage{tabls}
+\usepackage{setspace}
+\usepackage{xtab}
+\usepackage{subfig}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{multicol}
+\usepackage{bm}
+\usepackage[hang]{footmisc}
+\usepackage{bbm}
+\usepackage{arydshln}
+\usepackage{hyperref}
+
+\usepackage{mathpazo}
+
+\setlength\footnotemargin{10pt}
+\setlength{\parindent}{0in}
+\setlength{\parskip}{1em}
+
+\newcommand*\Let[2]{\State #1 $\gets$ #2}
+\newcommand{\integral}[4]{\int \limits_{#1}^{#2}\! #3 \,d#4}
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\cosine}[1]{\cos \left(#1\right)}
+\newcommand{\sine}[1]{\sin \left(#1\right)}
+\newcommand{\n}{\nonumber \\}
+\newcommand{\answer}[1]{\boxed{\mathbf{#1}}}
+\newcommand{\mat}[1]{\begin{bmatrix}#1\end{bmatrix}}
+\newcommand{\smat}[1]{\left(\begin{smallmatrix}#1\end{smallmatrix}\right)}
+\newcommand{\eqn}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\eqna}[1]{\begin{align*}#1\end{align*}}
+\newcommand{\prob}[1]{\text{Pr} \left[ #1 \right]}
+\newcommand{\pr}{\textup{Pr}}
+\newcommand{\event}{\mathcal{E}}
+\newcommand{\expect}{\mathbf{E}}
+\newcommand{\variance}{\mathbf{Var}}
+\newcommand{\opt}{\textup{\textsc{opt}}}
+\newcommand{\alg}{\textup{\textsc{alg}}}
+
+\newcommand{\blank}{\vspace{0.5cm}}
+\newcommand{\code}{\texttt}
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+\newcommand{\lb}{\left[}
+\newcommand{\rb}{\right]}
+
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\E}{\mathbb{E}}
+
+\DeclareMathOperator*{\sfim}{\mathsf{Im}}
+\DeclareMathOperator*{\sfker}{\mathsf{Kern}}
+\DeclareMathOperator*{\sfdim}{\mathsf{dim}}
+\DeclareMathOperator*{\sfdet}{\mathsf{det}}
+\DeclareMathOperator*{\sfperm}{\mathsf{per}}
+\DeclareMathOperator*{\sftr}{\mathsf{tr}}
+\DeclareMathOperator*{\sfrank}{\mathsf{rank}}
+\DeclareMathOperator*{\sfnlty}{\mathsf{null}}
+
+\newcommand{\Mod}[1]{\ \mathsf{mod}\ #1}
+\newcommand{\PMod}[1]{\ (\mathsf{mod}\ #1)}
+
+\DeclareMathOperator*{\card}{\mathsf{card}}
+\DeclareMathOperator*{\sgn}{\mathsf{sgn}}
+\DeclareMathOperator*{\indegree}{\mathsf{deg}^-}
+\DeclareMathOperator*{\outdegree}{\mathsf{deg}^+}
+
+\newcommand{\poisrv}{\mathsf{Pois}}
+\newcommand{\binrv}{\mathsf{Bin}}
+
+\newcommand{\bbone}{\mathbbm{1}}
+
+\newtheorem{lemma}{Lemma}
+\newtheorem{theorem}[lemma]{Theorem}
+\newtheorem{defn}[lemma]{Definition}
+\newtheorem{corollary}[lemma]{Corollary}
+\newtheorem{prop}[lemma]{Proposition}
+\newtheorem{claim}[lemma]{Claim}
+
+\setlength{\topmargin}{-0.6 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\textheight}{8.5 in}
+\setlength{\headsep}{0.75 in}
+\setlength{\parindent}{0 in}
+\setlength{\parskip}{0.2 in}
+
+% Redefined the margin on quote.
+\renewenvironment{quote}
+  {\list{}{\leftmargin=1em\rightmargin=1em}\item[]}%
+  {\endlist}
+
+% For referencing those algorithm boxes.
+\newcommand{\alglabel}[1]{\refstepcounter{algorithm}\label{#1}}
+
+% Section numbering
+\newcounter{lecnum}
+\renewcommand{\thesection}{\thelecnum.\arabic{section}}
+\renewcommand{\theequation}{\thelecnum.\arabic{equation}}
+\renewcommand{\thefigure}{\thelecnum.\arabic{figure}}
+\renewcommand{\thetable}{\thelecnum.\arabic{table}}
+
+% Macro for making section headers
+% \lecture{date}{ch-num}{ch-title}
+\newcommand{\lecture}[3]{
+    \thispagestyle{plain}
+    \newpage
+    \begin{center}
+    \framebox{
+    \vbox{\vspace{2mm}
+    \hbox to 6.28in {{\bf Chapter #2 \hfill #1}}
+        \vspace{6mm}
+        \hbox to 6.28in {{\Large \hfill #3  \hfill}}
+        \vspace{5mm}
+        \hbox to 6.28in {{Notes on \href{https://convex-optimization.github.io/ACO-v1.pdf}{\emph{Algorithms for Convex Optimization}} \hfill }}
+        \vspace{2mm}}
+    }
+    \end{center}
+    \vspace*{4mm}
+
+    % Set counters
+    \setcounter{lecnum}{#2}
+}
